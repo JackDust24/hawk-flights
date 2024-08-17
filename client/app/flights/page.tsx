@@ -22,11 +22,15 @@ export default function Flights() {
             required
           />
           <input
-            name='startDate'
-            placeholder='Start Date (dd/mm/yyyy)'
+            name='flightDate'
+            placeholder='Flight Date (dd/mm/yyyy)'
             required
           />
-          <input name='endDate' placeholder='End Date (dd/mm/yyyy)' required />
+          <input
+            name='returnDate'
+            placeholder='Return Date (dd/mm/yyyy)'
+            required
+          />
           <button type='submit'>Search</button>
         </div>
       </form>
