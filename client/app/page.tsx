@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function Home() {
   return (
-    <main className='flex min-h-screen items-center justify-between p-24'>
+    <main className='flex min-h-screen h-full bg-gray-100 items-center justify-center p-24'>
       <Link href='/flights' className='px-4 bg-emerald-400 text-white text-3xl'>
         <span>Enter</span>
       </Link>
