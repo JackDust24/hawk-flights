@@ -6,8 +6,10 @@ import FlightsForm from './_components/FlightsForm';
 import { searchFlight } from '@/actions/flights';
 import { Flight, FlightsResponse } from '@/lib/types';
 import Response from './_components/Response';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useBookingStore } from '@/store/bookingStore';
 
 const initialState: FlightsResponse = {
   message: '',
@@ -18,35 +20,45 @@ const initialState: FlightsResponse = {
 //TODO: Sort out the types
 export default function Flights() {
   const [response, action] = useFormState(searchFlight, initialState);
-  const [selectedOutbound, setSelectedOutbound] = useState<Flight | null>(null);
-  const [selectedInbound, setSelectedInbound] = useState<Flight | null>(null);
+  const {
+    selectedInboundFlight,
+    selectedOutboundFlight,
+    setSelectedInboundFlight,
+    setSelectedOutboundFlight,
+  } = useBookingStore();
+
   const inboundRef = useRef<HTMLDivElement | null>(null);
   const bookFlightRef = useRef<HTMLDivElement | null>(null);
 
   const handleOutboundSelect = (flight: Flight) => {
-    if (selectedOutbound?.id === flight.id) {
-      setSelectedOutbound(null);
+    if (selectedOutboundFlight?.id === flight.id) {
+      setSelectedOutboundFlight(null);
       return;
     }
-    setSelectedOutbound(flight);
+    setSelectedOutboundFlight(flight);
+
     if (inboundRef.current) {
       inboundRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   const handleInboundSelect = (flight: Flight) => {
-    if (selectedInbound?.id === flight.id) {
-      setSelectedInbound(null);
+    if (selectedInboundFlight?.id === flight.id) {
+      setSelectedInboundFlight(null);
       return;
     }
-    setSelectedInbound(flight);
+    setSelectedInboundFlight(flight);
   };
 
   useLayoutEffect(() => {
-    if (selectedOutbound && selectedInbound && bookFlightRef.current) {
+    if (
+      selectedOutboundFlight &&
+      selectedInboundFlight &&
+      bookFlightRef.current
+    ) {
       bookFlightRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [selectedInbound, selectedOutbound]);
+  }, [selectedInboundFlight, selectedOutboundFlight]);
 
   return (
     <div className='flex min-h-screen h-full p-6 bg-gray-100'>
@@ -65,7 +77,7 @@ export default function Flights() {
                     key={index}
                     flight={flight}
                     type='outbound'
-                    isSelected={selectedOutbound?.id === flight.id}
+                    isSelected={selectedOutboundFlight?.id === flight.id}
                     onSelect={() => handleOutboundSelect(flight)}
                   />
                 ))}
@@ -83,7 +95,7 @@ export default function Flights() {
                     key={index}
                     flight={flight}
                     type='inbound'
-                    isSelected={selectedInbound?.id === flight.id}
+                    isSelected={selectedInboundFlight?.id === flight.id}
                     onSelect={() => handleInboundSelect(flight)}
                   />
                 ))}
@@ -91,14 +103,16 @@ export default function Flights() {
             </div>
           )}
         </div>
-        {selectedOutbound && selectedInbound && (
+        {selectedOutboundFlight && selectedInboundFlight && (
           <div className='flex justify-center my-8 mb-16' ref={bookFlightRef}>
-            <Button
-              variant='select'
-              className='px-6 py-3 h-12 rounded-full text-3xl'
-            >
-              Book Flight
-            </Button>
+            <Link href='/booking'>
+              <Button
+                variant='select'
+                className='px-6 py-3 h-12 rounded-full text-3xl'
+              >
+                Book Flight
+              </Button>
+            </Link>
           </div>
         )}
       </div>
