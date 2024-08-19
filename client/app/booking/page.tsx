@@ -4,7 +4,7 @@ import { PageHeader } from '../_components/PageHeader';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useBookingStore } from '@/store/bookingStore';
+import { useFlightStore } from '@/store/flightStore';
 import BookingForm from './_components/BookingForm';
 import { ArrowRightIcon, CalendarIcon } from 'lucide-react';
 
@@ -16,7 +16,7 @@ export default function Booking() {
     selectedOutboundFlight,
     setSelectedInboundFlight,
     setSelectedOutboundFlight,
-  } = useBookingStore();
+  } = useFlightStore();
 
   const handleConfirm = () => {
     setShowBookingForm(true);
@@ -33,8 +33,9 @@ export default function Booking() {
     return null;
   }
 
-  const totalPrice =
-    (selectedOutboundFlight.price || 0) + (selectedInboundFlight.price || 0);
+  const totalPrice = `${
+    (selectedOutboundFlight.price || 0) + (selectedInboundFlight.price || 0)
+  }`;
 
   return (
     <div className='flex flex-col min-h-screen p-6 bg-gray-100'>
@@ -77,7 +78,7 @@ export default function Booking() {
         </div>
       </div>
       <div className='flex flex-col items-center my-6'>
-        <div className='text-2xl font-semibold'>Total Price: ${totalPrice}</div>
+        <div className='text-2xl font-semibold'>Total Price: {totalPrice}</div>
         {!showBookingForm && (
           <div className='flex gap-4 mt-4 md:mt-0'>
             <Button onClick={handleConfirm} variant='select'>
@@ -93,7 +94,7 @@ export default function Booking() {
       {showBookingForm && (
         <div className='flex flex-col items-center gap-4'>
           <h2 className='text-xl font-semibold text-center'>Booking Form</h2>
-          <BookingForm />
+          <BookingForm totalPrice={totalPrice} />
         </div>
       )}
     </div>

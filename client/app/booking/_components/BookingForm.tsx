@@ -3,13 +3,91 @@ import { Button } from '@/components/ui/button';
 import { Flight } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { createPaymentIntentAndBooking } from '@/actions/bookings';
+import { z } from 'zod';
+import { useFlightStore } from '@/store/flightStore';
+import { useBookingStore } from '@/store/bookingStore';
+import { useRouter } from 'next/navigation';
 
-export default function BookingForm() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+const paymentSchema = z.object({
+  fullname: z.string().min(1, 'Full name is required'),
+  email: z.string().email('Invalid email address'),
+  cardNumber: z.string().length(12, 'Card number must be 12 digits'),
+  expiryDate: z
+    .string()
+    .regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Invalid expiry date (MM/YYYY)'),
+  securityCode: z.string().length(3, 'Security code must be 3 digits'),
+  bankName: z.string().min(1, 'Bank name is required'),
+  nameOnAccount: z.string().min(1, 'Name on account is required'),
+});
 
-  const handleSubmit = (event: React.FormEvent) => {
+export default function BookingForm({ totalPrice }: { totalPrice: string }) {
+  const [error, setError] = useState(''); //TODO: Set errors
+  const [isLoading, setIsLoading] = useState(false);
+  const { selectedInboundFlight, selectedOutboundFlight } = useFlightStore();
+  const { addBooking } = useBookingStore();
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const paymentData = {
+      fullname: formData.get('fullname') as string,
+      email: formData.get('email') as string,
+      cardNumber: formData.get('cardNumber') as string,
+      expiryDate: formData.get('expiryDate') as string,
+      securityCode: formData.get('securityCode') as string,
+      bankName: formData.get('bankName') as string,
+      nameOnAccount: formData.get('nameOnAccount') as string,
+    };
+
+    const formResults = paymentSchema.safeParse(
+      Object.fromEntries(formData.entries())
+    );
+
+    console.log('Form data:', Object.fromEntries(formData.entries()));
+
+    if (formResults.success === false) {
+      return formResults.error.formErrors.fieldErrors;
+    }
+
+    if (!selectedInboundFlight) {
+      setError('No Inbound flight selected');
+      setIsLoading(false);
+      return;
+    }
+
+    const flightDetails = getFlightDetails(
+      selectedInboundFlight,
+      selectedOutboundFlight ?? undefined
+    );
+
+    try {
+      const response = await createPaymentIntentAndBooking({
+        paymentData,
+        flightData: flightDetails,
+        totalPrice,
+      });
+
+      if (response.status === 'success') {
+        console.log('Payment successful');
+        addBooking(response.data);
+        router.push('/booking-success');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Payment failed.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError('An error occurred during payment.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -22,10 +100,10 @@ export default function BookingForm() {
         <Label htmlFor='passengerName' className='flex flex-col'>
           <span className='py-1'>Passenger Name</span>
           <Input
+            id='fullname'
             type='text'
             placeholder='Name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name='fullname'
             className='border-2 p-2 rounded'
             required
           />
@@ -33,10 +111,10 @@ export default function BookingForm() {
         <Label htmlFor='passengeEmail' className='flex flex-col'>
           <span className='py-1'>Passenger Email</span>
           <Input
+            id='email'
             type='email'
             placeholder='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name='email'
             className='border-2 p-2 rounded'
             required
           />
@@ -50,7 +128,7 @@ export default function BookingForm() {
           <Input
             id='cardNumber'
             name='cardNumber'
-            type='text'
+            type='number'
             placeholder='Card Number'
             maxLength={12}
             className='border-2 p-2 rounded'
@@ -76,7 +154,7 @@ export default function BookingForm() {
           <Input
             id='securityCode'
             name='securityCode'
-            type='text'
+            type='number'
             placeholder='Security Code'
             maxLength={3}
             className='border-2 p-2 rounded'
@@ -108,9 +186,24 @@ export default function BookingForm() {
           />
         </Label>
       </div>
-      <Button type='submit' variant='select'>
-        Book Now
-      </Button>
+      <SubmitButton isPending={isLoading} />
     </form>
   );
+}
+
+function SubmitButton({ isPending }: { isPending: boolean }) {
+  return (
+    <Button type='submit' variant='select' disabled={isPending}>
+      {isPending ? 'Booking...' : 'Book Now'}
+    </Button>
+  );
+}
+
+function getFlightDetails(flightInound: Flight, flightOutbound?: Flight) {
+  const flightDetails: Flight[] = [];
+  flightDetails.push(flightInound);
+  if (flightOutbound) {
+    flightDetails.push(flightOutbound);
+  }
+  return flightDetails;
 }

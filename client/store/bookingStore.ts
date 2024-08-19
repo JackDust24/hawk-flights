@@ -1,17 +1,20 @@
-import create from 'zustand';
-import { Flight } from '../lib/types';
+import { create } from 'zustand';
+import { BookingInformation } from '../lib/types';
 
-type BookingStore = {
-  selectedOutboundFlight: Flight | null;
-  selectedInboundFlight: Flight | null;
-  setSelectedOutboundFlight: (flight: Flight | null) => void;
-  setSelectedInboundFlight: (flight: Flight | null) => void;
-};
+interface BookingStore {
+  bookings: BookingInformation[];
+  addBooking: (newBooking: BookingInformation) => void;
+}
 
-export const useBookingStore = create<BookingStore>((set) => ({
-  selectedOutboundFlight: null,
-  selectedInboundFlight: null,
-  setSelectedOutboundFlight: (flight) =>
-    set({ selectedOutboundFlight: flight }),
-  setSelectedInboundFlight: (flight) => set({ selectedInboundFlight: flight }),
-}));
+const defaultBookings: BookingInformation[] = [];
+
+export const useBookingStore = create<BookingStore>((set, get) => {
+  return {
+    bookings: defaultBookings,
+    addBooking: (newBooking) => {
+      set((state) => ({
+        bookings: [...state.bookings, newBooking],
+      }));
+    },
+  };
+});
