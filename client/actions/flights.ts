@@ -31,9 +31,6 @@ export async function searchFlight(prevState: any, formData: FormData) {
     const flightDate = new Date(formData.get('flightDate') as string);
     const returnDate = new Date(formData.get('returnDate') as string);
 
-    console.log('Flight date:', flightDate);
-    console.log('returnDate', returnDate);
-
     const query = new URLSearchParams({
       origin: formData.get('origin') as string,
       destination: formData.get('destination') as string,
@@ -46,7 +43,6 @@ export async function searchFlight(prevState: any, formData: FormData) {
     });
 
     const result = await response.json();
-    console.log('Flight data:', result);
     return result;
   } catch (error) {
     console.error('Error fetching flight data:', error);

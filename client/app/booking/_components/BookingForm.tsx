@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 const paymentSchema = z.object({
   fullname: z.string().min(1, 'Full name is required'),
   email: z.string().email('Invalid email address'),
-  cardNumber: z.string().length(12, 'Card number must be 12 digits'),
+  cardNumber: z.string().length(16, 'Card number must be 16 digits'),
   expiryDate: z
     .string()
     .regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Invalid expiry date (MM/YYYY)'),
@@ -28,33 +28,32 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
   const { addBooking } = useBookingStore();
   const router = useRouter();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
     setIsLoading(true);
 
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
+    const form2 = event.currentTarget;
+    const formData2: Record<string, string> = {};
 
-    const paymentData = {
-      fullname: formData.get('fullname') as string,
-      email: formData.get('email') as string,
-      cardNumber: formData.get('cardNumber') as string,
-      expiryDate: formData.get('expiryDate') as string,
-      securityCode: formData.get('securityCode') as string,
-      bankName: formData.get('bankName') as string,
-      nameOnAccount: formData.get('nameOnAccount') as string,
-    };
+    // Iterate over the form elements
+    Array.from(form2.elements).forEach((element) => {
+      if (
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLSelectElement ||
+        element instanceof HTMLTextAreaElement
+      ) {
+        formData2[element.name] = element.value as string;
+      }
+    });
 
-    const formResults = paymentSchema.safeParse(
-      Object.fromEntries(formData.entries())
-    );
-
-    console.log('Form data:', Object.fromEntries(formData.entries()));
+    const formResults = paymentSchema.safeParse(formData2);
 
     if (formResults.success === false) {
       return formResults.error.formErrors.fieldErrors;
     }
+
+    const validatedPaymentData = formResults.data;
 
     if (!selectedInboundFlight) {
       setError('No Inbound flight selected');
@@ -69,18 +68,16 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
 
     try {
       const response = await createPaymentIntentAndBooking({
-        paymentData,
+        paymentData: validatedPaymentData,
         flightData: flightDetails,
         totalPrice,
       });
 
-      if (response.status === 'success') {
-        console.log('Payment successful');
-        addBooking(response.data);
-        router.push('/confirmations');
+      if (Object.hasOwn(response, 'bookingId')) {
+        addBooking(response);
+        router.push('/confirmation');
       } else {
-        const data = await response.json();
-        setError(data.error || 'Payment failed.');
+        setError('Payment failed.');
         setIsLoading(false);
       }
     } catch (err) {
@@ -130,7 +127,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             name='cardNumber'
             type='number'
             placeholder='Card Number'
-            maxLength={12}
+            maxLength={16}
             className='border-2 p-2 rounded'
             required
           />
@@ -193,7 +190,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
 
 function SubmitButton({ isPending }: { isPending: boolean }) {
   return (
-    <Button type='submit' variant='select' disabled={isPending}>
+    <Button type='submit' variant='select' disabled={false}>
       {isPending ? 'Booking...' : 'Book Now'}
     </Button>
   );

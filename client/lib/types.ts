@@ -30,11 +30,9 @@ export type PaymentData = {
 
 export type BookingInformation = {
   flightDetails: Flight[];
-  datePaid: string;
-  bookingConfirmed: boolean;
   bookingId: string;
   totalPrice: string;
-  name: string;
+  fullname: string;
   email: string;
   paid: boolean;
 };

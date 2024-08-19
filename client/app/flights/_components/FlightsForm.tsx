@@ -14,7 +14,6 @@ type FlightsFormProps = {
 export default function FlightsForm({ onSubmit, error }: FlightsFormProps) {
   const [flightDate, setFlightDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
-  console.log('Return date:', returnDate);
 
   useEffect(() => {
     if (flightDate && returnDate && flightDate > returnDate) {

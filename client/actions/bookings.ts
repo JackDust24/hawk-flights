@@ -1,7 +1,7 @@
 'use server';
 
 import { Flight, PaymentData } from '@/lib/types';
-import crypto from 'crypto-js';
+import crypto from 'crypto';
 
 const API_URL = 'http://localhost:8080/api';
 
@@ -12,8 +12,12 @@ type BookingData = {
 };
 
 const encryptData = (data: string) => {
-  const secretKey = 'mock_secret_key';
-  return crypto.AES.encrypt(data, secretKey).toString();
+  const secretKey = 'mock_secret_key_for_demo';
+  const iv = crypto.randomBytes(16);
+  let cipher = crypto.createCipheriv('aes-192-cbc', Buffer.from(secretKey), iv);
+  let encrypted = cipher.update(data);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 };
 
 //TODO: Add types for Promise
@@ -67,8 +71,8 @@ export async function createPaymentIntentAndBooking({
         }),
       });
 
-      if (bookingResponse.ok) {
-        return bookingResponse;
+      if (bookingResponse.status === 200) {
+        return bookingResponse.json();
       } else {
         return { status: 'error', message: 'Booking response error' };
       }
