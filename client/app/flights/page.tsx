@@ -9,7 +9,7 @@ import Response from './_components/Response';
 import { useLayoutEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useBookingStore } from '@/store/bookingStore';
+import { useFlightStore } from '@/store/flightStore';
 
 const initialState: FlightsResponse = {
   message: '',
@@ -25,7 +25,7 @@ export default function Flights() {
     selectedOutboundFlight,
     setSelectedInboundFlight,
     setSelectedOutboundFlight,
-  } = useBookingStore();
+  } = useFlightStore();
 
   const inboundRef = useRef<HTMLDivElement | null>(null);
   const bookFlightRef = useRef<HTMLDivElement | null>(null);

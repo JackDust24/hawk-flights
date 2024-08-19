@@ -4,19 +4,16 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '../../_components/DatePicker';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { useFormStatus } from 'react-dom';
 
 type FlightsFormProps = {
   onSubmit: (payload: FormData) => void;
   error: any; //TODO: Set this up properly
 };
-const initialState = {
-  message: '',
-};
 
 export default function FlightsForm({ onSubmit, error }: FlightsFormProps) {
   const [flightDate, setFlightDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
-  console.log('Return date:', returnDate);
 
   useEffect(() => {
     if (flightDate && returnDate && flightDate > returnDate) {
@@ -97,12 +94,19 @@ export default function FlightsForm({ onSubmit, error }: FlightsFormProps) {
             Please enter flight details
           </div>
           <div className='flex justify-end'>
-            <Button type='submit' variant='select'>
-              Search
-            </Button>
+            <SubmitButton />
           </div>
         </div>
       </form>
     </div>
+  );
+}
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type='submit' variant='select' disabled={pending}>
+      {pending ? 'Searching...' : 'Search'}
+    </Button>
   );
 }

@@ -23,6 +23,24 @@ const createFlights = (db) => {
           }
         }
       );
+
+      db.run(
+        `CREATE TABLE IF NOT EXISTS bookings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        bookingId TEXT NOT NULL,
+        fullname TEXT NOT NULL,
+        totalPrice TEXT NOT NULL, 
+        flightDetails TEXT NOT NULL,
+        paid INTEGER NOT NULL CHECK (paid IN (0, 1)), 
+        email TEXT NOT NULL
+    )`,
+        (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        }
+      );
     });
   });
 };

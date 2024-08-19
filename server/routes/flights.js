@@ -31,13 +31,10 @@ router.get('/flights', (req, res) => {
       console.error('Database error:', err.message);
       return;
     }
-
-    console.log('Flights data:', rows);
   });
 
   if (origin && destination && flightDate && returnDate) {
     // Note for Mock reasons only to match the mock data in the database
-
     // Get the outboundFlights
     db.all(
       `SELECT * FROM flights
@@ -83,7 +80,7 @@ router.get('/flights', (req, res) => {
             }));
 
             res.status(200).json({
-              message: 'Flight search successful Jase',
+              message: 'Success',
               outbound: modifiedOutboundFlights,
               inbound: modifiedInboundFlights,
             });

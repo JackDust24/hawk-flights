@@ -14,7 +14,6 @@ export default function Response({
   isSelected: boolean;
   onSelect: () => void;
 }) {
-  console.log('Flight response:', flight);
   return (
     <div
       key={flight.id}
