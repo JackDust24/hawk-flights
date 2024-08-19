@@ -77,7 +77,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
       if (response.status === 'success') {
         console.log('Payment successful');
         addBooking(response.data);
-        router.push('/booking-success');
+        router.push('/confirmations');
       } else {
         const data = await response.json();
         setError(data.error || 'Payment failed.');
