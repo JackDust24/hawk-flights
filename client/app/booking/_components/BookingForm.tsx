@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { useFlightStore } from '@/store/flightStore';
 import { useBookingStore } from '@/store/bookingStore';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@radix-ui/react-toast';
 
 const paymentSchema = z.object({
   fullname: z.string().min(1, 'Full name is required'),
@@ -21,42 +23,70 @@ const paymentSchema = z.object({
   nameOnAccount: z.string().min(1, 'Name on account is required'),
 });
 
+type ErrorTypes = {
+  fullname?: string[] | undefined;
+  email?: string[] | undefined;
+  cardNumber?: string[] | undefined;
+  expiryDate?: string[] | undefined;
+  securityCode?: string[] | undefined;
+  bankName?: string[] | undefined;
+  nameOnAccount?: string[] | undefined;
+};
+
 export default function BookingForm({ totalPrice }: { totalPrice: string }) {
-  const [error, setError] = useState(''); //TODO: Set errors
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const [error, setError] = useState<ErrorTypes | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { selectedInboundFlight, selectedOutboundFlight } = useFlightStore();
   const { addBooking } = useBookingStore();
-  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError('');
+    setError(null);
     setIsLoading(true);
 
-    const form2 = event.currentTarget;
-    const formData2: Record<string, string> = {};
+    const form = event.currentTarget;
+    const formData: Record<string, string> = {};
 
     // Iterate over the form elements
-    Array.from(form2.elements).forEach((element) => {
+    Array.from(form.elements).forEach((element) => {
       if (
         element instanceof HTMLInputElement ||
         element instanceof HTMLSelectElement ||
         element instanceof HTMLTextAreaElement
       ) {
-        formData2[element.name] = element.value as string;
+        formData[element.name] = element.value as string;
       }
     });
 
-    const formResults = paymentSchema.safeParse(formData2);
+    const formResults = paymentSchema.safeParse(formData);
 
     if (formResults.success === false) {
+      console.log(formResults.error.formErrors.fieldErrors);
+      console.log(formResults.error.formErrors);
+      toast({
+        variant: 'destructive',
+        title: 'There were errors in the form.',
+        description: 'Please check you filled the form correctly.',
+        action: <ToastActionButton />,
+      });
+      setError(formResults.error.formErrors.fieldErrors);
+      setIsLoading(false);
+
       return formResults.error.formErrors.fieldErrors;
     }
 
     const validatedPaymentData = formResults.data;
 
     if (!selectedInboundFlight) {
-      setError('No Inbound flight selected');
+      toast({
+        variant: 'destructive',
+        title: 'No Inbound flight selected.',
+        description: 'Please refresh the page or select flight again.',
+        action: <ToastActionButton />,
+      });
       setIsLoading(false);
       return;
     }
@@ -75,13 +105,29 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
 
       if (Object.hasOwn(response, 'bookingId')) {
         addBooking(response);
+        toast({
+          title: 'Your booking was a success.',
+          description: `Confirmation of booking - ${response.bookingId} .`,
+        });
         router.push('/confirmation');
       } else {
-        setError('Payment failed.');
+        toast({
+          variant: 'destructive',
+          title: 'Booking failed.',
+          description:
+            'There was a problem making your booking. Please contact support',
+          action: <ToastActionButton />,
+        });
         setIsLoading(false);
       }
     } catch (err) {
-      setError('An error occurred during payment.');
+      toast({
+        variant: 'destructive',
+        title: 'An error occurred during payment.',
+        description: 'Please recheck that you entered the correct details.',
+        action: <ToastActionButton />,
+      });
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -99,11 +145,12 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
           <Input
             id='fullname'
             type='text'
-            placeholder='Name'
+            placeholder='full name'
             name='fullname'
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.fullname}</div>
         </Label>
         <Label htmlFor='passengeEmail' className='flex flex-col'>
           <span className='py-1'>Passenger Email</span>
@@ -115,6 +162,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.email}</div>
         </Label>
       </div>
 
@@ -131,6 +179,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.cardNumber}</div>
         </Label>
 
         <Label htmlFor='expiryDate' className='flex flex-col'>
@@ -144,6 +193,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.expiryDate}</div>
         </Label>
 
         <Label htmlFor='securityCode' className='flex flex-col'>
@@ -157,6 +207,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.securityCode}</div>
         </Label>
 
         <Label htmlFor='bankName' className='flex flex-col'>
@@ -169,6 +220,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.bankName}</div>
         </Label>
 
         <Label htmlFor='nameOnAccount' className='flex flex-col'>
@@ -181,16 +233,19 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
             className='border-2 p-2 rounded'
             required
           />
+          <div className='text-destructive'>{error?.nameOnAccount}</div>
         </Label>
       </div>
-      <SubmitButton isPending={isLoading} />
+      <div className='flex justify-between items-center mt-8 mb-2'>
+        <SubmitButton isPending={isLoading} />
+      </div>
     </form>
   );
 }
 
 function SubmitButton({ isPending }: { isPending: boolean }) {
   return (
-    <Button type='submit' variant='select' disabled={false}>
+    <Button type='submit' variant='select' disabled={isPending}>
       {isPending ? 'Booking...' : 'Book Now'}
     </Button>
   );
@@ -203,4 +258,12 @@ function getFlightDetails(flightInound: Flight, flightOutbound?: Flight) {
     flightDetails.push(flightOutbound);
   }
   return flightDetails;
+}
+
+function ToastActionButton() {
+  return (
+    <ToastAction className='font-bold border-2 p-2 border-white' altText='Ok'>
+      OK!
+    </ToastAction>
+  );
 }

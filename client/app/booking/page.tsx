@@ -40,7 +40,7 @@ export default function Booking() {
   return (
     <div className='flex flex-col min-h-screen p-6 bg-gray-100'>
       <PageHeader>Booking</PageHeader>
-      <div className='flex flex-col md:flex-row justify-center gap-8'>
+      <div className='flex flex-col md:flex-row justify-center gap-8 mb-8'>
         <div className='flex-1 bg-white p-6 rounded-lg shadow-md max-w-md'>
           <h2 className='text-xl font-semibold mb-4 flex items-center'>
             <ArrowRightIcon className='mr-2 h-5 w-5 text-blue-600' />
@@ -78,7 +78,9 @@ export default function Booking() {
         </div>
       </div>
       <div className='flex flex-col items-center my-6'>
-        <div className='text-2xl font-semibold'>Total Price: {totalPrice}</div>
+        <div className='text-2xl mb-4 font-semibold'>
+          Total Price: ${totalPrice}
+        </div>
         {!showBookingForm && (
           <div className='flex gap-4 mt-4 md:mt-0'>
             <Button onClick={handleConfirm} variant='select'>
