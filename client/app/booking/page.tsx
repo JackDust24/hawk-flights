@@ -23,8 +23,8 @@ export default function Booking() {
   };
 
   const handleCancel = () => {
-    // setSelectedInboundFlight(null);
-    // setSelectedOutboundFlight(null);
+    setSelectedInboundFlight(null);
+    setSelectedOutboundFlight(null);
     router.back();
   };
 

@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcryptjs');
 
-const createFlights = (db) => {
+const createTables = (db) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
       db.run(
@@ -41,13 +42,75 @@ const createFlights = (db) => {
           resolve();
         }
       );
+
+      db.run(
+        `
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT NOT NULL UNIQUE,
+          email TEXT NOT NULL UNIQUE,
+          hashedPassword TEXT NOT NULL,
+          role TEXT NOT NULL,
+          createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `,
+        (err) => {
+          if (err) {
+            console.error('Error creating users table:', err.message);
+          }
+        }
+      );
+    });
+  });
+};
+
+const insertDefaultUsers = async (db) => {
+  const hashedMembePassword = await bcrypt.hash('member1234', 10);
+  const hashedAdminPassword = await bcrypt.hash('admin1234', 10);
+
+  return new Promise((resolve, reject) => {
+    db.get(`SELECT COUNT(*) AS count FROM users`, (err, row) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (row.count > 0) {
+        console.log('Default user data already exists, skipping insertion.');
+        resolve();
+        return;
+      }
+
+      db.serialize(() => {
+        const stmt =
+          db.prepare(`INSERT INTO users (username, email, hashedPassword, role)
+            VALUES (?, ?, ?, ?)`);
+
+        stmt.run(
+          'memberUser',
+          'member@example.com',
+          hashedMembePassword,
+          'member'
+        );
+        stmt.run(
+          'adminUser',
+          'adminr@example.com',
+          hashedAdminPassword,
+          'admin'
+        );
+        stmt.finalize((err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      });
     });
   });
 };
 
 const insertMockData = (db) => {
   return new Promise((resolve, reject) => {
-    // Check if mock data already exists
     db.get(`SELECT COUNT(*) AS count FROM flights`, (err, row) => {
       if (err) {
         reject(err);
@@ -55,19 +118,16 @@ const insertMockData = (db) => {
       }
 
       if (row.count > 0) {
-        // Data already exists, skip insertion
         console.log('Mock data already exists, skipping insertion.');
         resolve();
         return;
       }
 
-      // Data does not exist, insert mock data
       db.serialize(() => {
         const stmt =
           db.prepare(`INSERT INTO flights (origin, destination, flight_date, flight_time, stops, flight_length, price, flight_number)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
 
-        // Insert mock data into flights table
         stmt.run(
           'London',
           'Bangkok',
@@ -153,4 +213,9 @@ const clearData = (db) => {
   });
 };
 
-module.exports = { createFlights, insertMockData, clearData };
+module.exports = {
+  createTables,
+  insertMockData,
+  insertDefaultUsers,
+  clearData,
+};

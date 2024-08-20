@@ -50,7 +50,6 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
     const form = event.currentTarget;
     const formData: Record<string, string> = {};
 
-    // Iterate over the form elements
     Array.from(form.elements).forEach((element) => {
       if (
         element instanceof HTMLInputElement ||

@@ -14,8 +14,12 @@ type BookingData = {
 const encryptData = (data: string) => {
   const secretKey = 'mock_secret_key_for_demo';
   const iv = crypto.randomBytes(16);
-  let cipher = crypto.createCipheriv('aes-192-cbc', Buffer.from(secretKey), iv);
-  let encrypted = cipher.update(data);
+  const cipher = crypto.createCipheriv(
+    'aes-192-cbc',
+    Buffer.from(secretKey),
+    iv
+  );
+  const encrypted = cipher.update(data);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 };

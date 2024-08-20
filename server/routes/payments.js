@@ -3,13 +3,11 @@ const router = express.Router();
 const crypto = require('crypto');
 const { z } = require('zod');
 
-// // Defining algorithm
-// For Demo purposes only
 const decryptData = (data) => {
   const secretKey = 'mock_secret_key_for_demo';
-  let iv = Buffer.from(data.iv, 'hex');
-  let encryptedText = Buffer.from(data.encryptedData, 'hex');
-  let decipher = crypto.createDecipheriv(
+  const iv = Buffer.from(data.iv, 'hex');
+  const encryptedText = Buffer.from(data.encryptedData, 'hex');
+  const decipher = crypto.createDecipheriv(
     'aes-192-cbc',
     Buffer.from(secretKey),
     iv
@@ -30,7 +28,7 @@ const paymentSchema = z.object({
   totalPrice: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/, 'Total price must be a valid amount'),
-  currency: z.enum(['usd', 'eur', 'gbp']).default('usd'), // Example currencies
+  currency: z.enum(['usd', 'eur', 'gbp']).default('usd'),
 });
 
 router.post('/create-payment-intent', (req, res) => {

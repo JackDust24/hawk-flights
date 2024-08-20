@@ -13,18 +13,18 @@ const bookingSchema = z.object({
   flightData: z
     .array(
       z.object({
-        id: z.number().int().positive(), // id must be a positive integer
-        origin: z.string().min(1, 'Origin is required'), // origin must be a non-empty string
-        destination: z.string().min(1, 'Destination is required'), // destination must be a non-empty string
+        id: z.number().int().positive(),
+        origin: z.string().min(1, 'Origin is required'),
+        destination: z.string().min(1, 'Destination is required'),
         flight_date: z
           .string()
-          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'), // date must follow YYYY-MM-DD format
+          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
         flight_time: z
           .string()
-          .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format (HH:MM)'), // time must follow HH:MM format
-        stops: z.number().int().nonnegative(), // stops must be a non-negative integer
-        flight_length: z.number().positive(), // flight_length must be a positive number (hours)
-        price: z.number().positive(), // price must be a positive number
+          .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format (HH:MM)'),
+        stops: z.number().int().nonnegative(),
+        flight_length: z.number().positive(),
+        price: z.number().positive(),
         flight_number: z.string().min(1, 'Flight number is required'),
       })
     )
