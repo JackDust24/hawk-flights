@@ -1,4 +1,4 @@
-import { Flight, FlightType } from '@/lib/types';
+import { Flight, FlightType } from '@/app/lib/types';
 import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
 import React from 'react';
 import { Button } from '@/components/ui/button';

@@ -1,6 +1,6 @@
 'use server';
 
-import { Flight, PaymentData } from '@/lib/types';
+import { Flight, PaymentData } from '@/app/lib/types';
 import crypto from 'crypto';
 
 const API_URL = 'http://localhost:8080/api';
@@ -19,7 +19,7 @@ const encryptData = (data: string) => {
     Buffer.from(secretKey),
     iv
   );
-  const encrypted = cipher.update(data);
+  let encrypted = cipher.update(data);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 };

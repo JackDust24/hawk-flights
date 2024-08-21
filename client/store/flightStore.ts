@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Flight } from '../lib/types';
+import { Flight } from '../app/lib/types';
 
 interface FlightStore {
   selectedOutboundFlight: Flight | null;

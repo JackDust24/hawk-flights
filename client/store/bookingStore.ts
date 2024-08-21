@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { BookingInformation } from '../lib/types';
+import { BookingInformation } from '../app/lib/types';
 
 interface BookingStore {
   bookings: BookingInformation[];

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Flight } from '@/lib/types';
+import { Flight } from '@/app/lib/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createPaymentIntentAndBooking } from '@/actions/bookings';
@@ -9,7 +9,7 @@ import { useFlightStore } from '@/store/flightStore';
 import { useBookingStore } from '@/store/bookingStore';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
-import { ToastAction } from '@radix-ui/react-toast';
+import ToastActionButton from '@/components/ToastActionButton';
 
 const paymentSchema = z.object({
   fullname: z.string().min(1, 'Full name is required'),
@@ -33,6 +33,7 @@ type ErrorTypes = {
   nameOnAccount?: string[] | undefined;
 };
 
+//TODO: Refactoring
 export default function BookingForm({ totalPrice }: { totalPrice: string }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -63,8 +64,6 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
     const formResults = paymentSchema.safeParse(formData);
 
     if (formResults.success === false) {
-      console.log(formResults.error.formErrors.fieldErrors);
-      console.log(formResults.error.formErrors);
       toast({
         variant: 'destructive',
         title: 'There were errors in the form.',
@@ -257,12 +256,4 @@ function getFlightDetails(flightInound: Flight, flightOutbound?: Flight) {
     flightDetails.push(flightOutbound);
   }
   return flightDetails;
-}
-
-function ToastActionButton() {
-  return (
-    <ToastAction className='font-bold border-2 p-2 border-white' altText='Ok'>
-      OK!
-    </ToastAction>
-  );
 }

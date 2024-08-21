@@ -4,7 +4,7 @@ import { useFormState } from 'react-dom';
 import { PageHeader } from '../_components/PageHeader';
 import FlightsForm from './_components/FlightsForm';
 import { searchFlight } from '@/actions/flights';
-import { Flight, FlightsResponse } from '@/lib/types';
+import { Flight, FlightsResponse } from '@/app/lib/types';
 import Response from './_components/Response';
 import { useLayoutEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';

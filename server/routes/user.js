@@ -35,46 +35,56 @@ router.post('/register', async (req, res) => {
     });
   }
 
-  res.json({ message: 'User registered' });
+  res
+    .status(200)
+    .json({ status: 201, success: true, message: 'User registered' });
 });
 
 router.post('/login', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
-  console.log('Login attempt:', username, email, password);
-
-  db.get(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (err, user) => {
-      if (err || !user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      console.log('compare:', password, user.hashedPassword);
-
-      const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
-
-      console.log('passwordMatch:', passwordMatch);
-
-      if (passwordMatch) {
-        const token = jwt.sign({ id: user.id, role: user.role }, jwt_secret, {
-          expiresIn: '1h',
-        });
-
-        res.cookie('token', token, {
-          httpOnly: true,
-          secure: false, // Will be true in production
-          sameSite: 'Strict',
-          maxAge: 3600000,
-        });
-
-        return res.json({ message: 'Login successful' });
-      } else {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
+  db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: 'Database error', error: err.message });
     }
-  );
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
+
+    if (passwordMatch) {
+      const token = jwt.sign(
+        {
+          id: user.id,
+          role: user.role,
+          username: user.username,
+          email: user.email,
+        },
+        jwt_secret
+      );
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, // Will be true in production
+        sameSite: 'Lax', // Adjust as needed
+        maxAge: 3600000000,
+      });
+
+      return res.status(201).json({
+        status: 200,
+        success: true,
+        message: 'Login successful',
+        token,
+        user,
+      });
+    } else {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+  });
 });
 
 module.exports = router;
