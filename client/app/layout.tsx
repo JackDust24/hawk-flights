@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
-import { LoginStatus, Nav, NavLink } from '@/components/nav';
+import { LoginStatus, Nav, NavLink } from './_components/nav';
 import AuthProvider from './providers/AuthProvider';
 import { getServerSession } from 'next-auth';
 import './globals.css';
+import { RootErrorBoundary } from './features/RootErrorBoundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,17 +24,19 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <AuthProvider session={session}>
-          <Nav className='z-20'>
-            <NavLink href='/'>Home</NavLink>
-            <NavLink href='/flights'>Search Flights</NavLink>
-            <NavLink href='/profile'>Profile</NavLink>
-            <NavLink href='/admin-dashboard'>Admin Access</NavLink>
-            <LoginStatus />
-          </Nav>
-          {children}
-          <Toaster />
-        </AuthProvider>
+        <RootErrorBoundary>
+          <AuthProvider session={session}>
+            <Nav className='z-20'>
+              <NavLink href='/'>Home</NavLink>
+              <NavLink href='/flights'>Search Flights</NavLink>
+              <NavLink href='/profile'>Profile</NavLink>
+              <NavLink href='/admin-dashboard'>Admin Access</NavLink>
+              <LoginStatus />
+            </Nav>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </RootErrorBoundary>
       </body>
     </html>
   );
