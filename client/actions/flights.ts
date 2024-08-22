@@ -1,5 +1,6 @@
 'use server';
 
+import { FlightsResponse } from '@/app/lib/types';
 import { z } from 'zod';
 
 const dateSchema = z
@@ -18,13 +19,27 @@ const addSchema = z.object({
   returnDate: dateSchema,
 });
 
-export async function searchFlight(prevState: any, formData: FormData) {
+export type SearchFlightsResponse = {
+  success?: boolean;
+  message?: string;
+  fieldErrors?: Record<string, string[]>;
+  searchResult?: FlightsResponse;
+};
+
+export async function searchFlight(
+  prevState: any,
+  formData: FormData
+): Promise<SearchFlightsResponse> {
   const formResults = addSchema.safeParse(
     Object.fromEntries(formData.entries())
   );
 
   if (formResults.success === false) {
-    return formResults.error.formErrors.fieldErrors;
+    return {
+      success: false,
+      message: 'Form validation failed',
+      fieldErrors: formResults.error.formErrors.fieldErrors,
+    };
   }
 
   try {
@@ -38,14 +53,25 @@ export async function searchFlight(prevState: any, formData: FormData) {
       returnDate: returnDate.toISOString().split('T')[0],
     }).toString();
 
-    const response = await fetch(`http://localhost:8080/api/flights?${query}`, {
-      method: 'GET',
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/flights?${query}`,
+      {
+        method: 'GET',
+      }
+    );
 
     const result = await response.json();
-    return result;
+
+    return {
+      success: true,
+      message: 'Search Results found',
+      searchResult: result,
+    };
   } catch (error) {
     console.error('Error fetching flight data:', error);
-    return error;
+    return {
+      success: false,
+      message: 'Error fetching flight data:.',
+    };
   }
 }

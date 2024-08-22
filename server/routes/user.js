@@ -13,20 +13,54 @@ router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    db.get(
+      'SELECT * FROM users WHERE username = ? OR email = ?',
+      [username, email],
+      async (err, user) => {
+        if (err) {
+          console.error('Database error:', err.message);
+          return res
+            .status(500)
+            .json({ message: 'Database error', error: err.message });
+        }
 
-    const insertSQL = `
-  INSERT INTO users (username, email, hashedPassword, role)
-  VALUES (?, ?, ?, ?)
-`;
+        if (user) {
+          return res.status(409).json({
+            message: 'Username or email already taken',
+            error: 'Please choose a different username or email',
+          });
+        }
 
-    db.run(insertSQL, [username, email, hashedPassword, role], function (err) {
-      if (err) {
-        console.error('Error inserting user:', err.message);
-      } else {
-        console.log(`User ${username} inserted with ID: ${this.lastID}`);
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert the new user
+        const insertSQL = `
+    INSERT INTO users (username, email, hashedPassword, role)
+    VALUES (?, ?, ?, ?)
+  `;
+
+        db.run(
+          insertSQL,
+          [username, email, hashedPassword, role],
+          function (err) {
+            if (err) {
+              console.error('Error inserting user:', err.message);
+              return res
+                .status(500)
+                .json({ message: 'Error inserting user', error: err.message });
+            } else {
+              console.log(`User ${username} inserted with ID: ${this.lastID}`);
+              return res.status(201).json({
+                status: 201,
+                success: true,
+                message: 'User registered',
+              });
+            }
+          }
+        );
       }
-    });
+    );
   } catch (err) {
     console.error('Error hashing password:', err.message);
     res.status(400).json({
@@ -34,14 +68,12 @@ router.post('/register', async (req, res) => {
       error: 'Please provide all required fields',
     });
   }
-
-  res
-    .status(200)
-    .json({ status: 201, success: true, message: 'User registered' });
 });
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log('email:', email);
+  console.log('password:', password);
 
   db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
     if (err) {

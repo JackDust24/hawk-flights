@@ -1,9 +1,7 @@
 'use server';
 
-import { Flight, PaymentData } from '@/app/lib/types';
+import { BookingInformation, Flight, PaymentData } from '@/app/lib/types';
 import crypto from 'crypto';
-
-const API_URL = 'http://localhost:8080/api';
 
 type BookingData = {
   paymentData: PaymentData;
@@ -24,19 +22,24 @@ const encryptData = (data: string) => {
   return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 };
 
-//TODO: Add types for Promise
+export type PaymentResponse = {
+  status: 'success' | 'error';
+  message: string;
+  booking?: BookingInformation;
+};
+
 export async function createPaymentIntentAndBooking({
   paymentData,
   flightData,
   totalPrice,
-}: BookingData): Promise<any> {
+}: BookingData): Promise<PaymentResponse> {
   const encryptedCardNumber = encryptData(paymentData.cardNumber);
   const encryptedExpiryDate = encryptData(paymentData.expiryDate);
   const encryptedSecurityCode = encryptData(paymentData.securityCode);
 
   try {
     const paymentResponse = await fetch(
-      `${API_URL}/payments/create-payment-intent`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/payments/create-payment-intent`,
       {
         method: 'POST',
         headers: {
@@ -76,7 +79,13 @@ export async function createPaymentIntentAndBooking({
       });
 
       if (bookingResponse.status === 200) {
-        return bookingResponse.json();
+        const booking = await bookingResponse.json();
+
+        return {
+          status: 'success',
+          message: 'Booking and payment confirmed',
+          booking: booking,
+        };
       } else {
         return { status: 'error', message: 'Booking response error' };
       }
@@ -85,6 +94,6 @@ export async function createPaymentIntentAndBooking({
     }
   } catch (error) {
     console.error('Error booking flight:', error);
-    return error;
+    return { status: 'error', message: 'Error booking flight' };
   }
 }

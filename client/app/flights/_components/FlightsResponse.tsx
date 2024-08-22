@@ -3,7 +3,7 @@ import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-export default function Response({
+export default function FlightsResponse({
   flight,
   type,
   isSelected,
@@ -18,7 +18,7 @@ export default function Response({
     <div
       key={flight.id}
       onClick={onSelect}
-      className={`p-4 w-[40rem] border-2 rounded-xl shadow-sm cursor-pointer transition-all duration-300 ${
+      className={`p-4 overflow-hidden w-[40rem] border-2 rounded-xl shadow-sm cursor-pointer transition-all duration-300 ${
         isSelected
           ? 'bg-blue-100 border-blue-500'
           : 'bg-white border-gray-300 opacity-100 hover:opacity-90'

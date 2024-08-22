@@ -14,7 +14,7 @@ export default function Profile() {
     if (!user && session?.user.token) {
       const getProfileData = async () => {
         const data = await fetchData(
-          'http://localhost:8080/profile',
+          `${process.env.NEXT_PUBLIC_API_URL}/profile`,
           session?.user.token
         );
         if (data) {

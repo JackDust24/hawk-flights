@@ -26,10 +26,19 @@ router.get('/flights', (req, res) => {
     });
   }
 
+  if (origin === destination) {
+    return res.status(400).json({
+      message: 'Invalid input',
+      error: 'You cannot fly to the same place',
+    });
+  }
+
   db.all(`SELECT * FROM flights`, [], (err, rows) => {
     if (err) {
       console.error('Database error:', err.message);
-      return;
+      return res
+        .status(500)
+        .json({ message: 'Database error', error: err.message });
     }
   });
 
@@ -79,11 +88,14 @@ router.get('/flights', (req, res) => {
               flight_date: returnDate,
             }));
 
-            res.status(200).json({
-              message: 'Success',
-              outbound: modifiedOutboundFlights,
-              inbound: modifiedInboundFlights,
-            });
+            // Delay for demo purposes
+            setTimeout(() => {
+              res.status(200).json({
+                message: 'Success',
+                outbound: modifiedOutboundFlights,
+                inbound: modifiedInboundFlights,
+              });
+            }, 1000);
           }
         );
       }

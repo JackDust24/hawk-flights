@@ -8,7 +8,16 @@ const registrationSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-export async function registerUser(prevState: any, formData: FormData) {
+export type RegisterUserResponse = {
+  success?: boolean;
+  message?: string;
+  fieldErrors?: Record<string, string[]>;
+};
+
+export async function registerUser(
+  prevState: any,
+  formData: FormData
+): Promise<RegisterUserResponse> {
   const formObject = Object.fromEntries(formData.entries());
 
   const formResults = registrationSchema.safeParse(
@@ -16,7 +25,11 @@ export async function registerUser(prevState: any, formData: FormData) {
   );
 
   if (formResults.success === false) {
-    return formResults.error.formErrors.fieldErrors;
+    return {
+      success: false,
+      message: 'Form validation failed',
+      fieldErrors: formResults.error.formErrors.fieldErrors,
+    };
   }
 
   try {
@@ -25,7 +38,7 @@ export async function registerUser(prevState: any, formData: FormData) {
       role: formObject.role || 'member',
     };
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/register`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`,
       {
         method: 'POST',
         headers: {
@@ -36,7 +49,6 @@ export async function registerUser(prevState: any, formData: FormData) {
     );
 
     if (response.ok) {
-      //TODO:   redirect('/signin');
       return { success: true, message: 'Register successful' };
     } else {
       const errorData = await response.json();

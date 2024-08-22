@@ -1,77 +1,87 @@
 'use client';
 
 import { useState } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { PageHeader } from '../_components/PageHeader';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import PageLayout from '../_components/PageLayout';
-
-const initialState = {
-  message: '',
-  success: false,
-};
+import z from 'zod';
 
 type Response = {
   error?: {
-    emailOrPassword?: string;
+    email?: string;
+    password?: string;
     message?: string;
-  };
+  } | null;
   success?: boolean;
   message?: string;
 };
 
-//TODO: Sort out error responses
+const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+});
+
 export default function Login() {
-  const [error, setError] = useState<Response | null>(null);
   const [response, setResponse] = useState<Response | null>(null);
   const { data: session, status } = useSession();
-  const router = useRouter(); //TODO: Work out routing
 
-  if (status === 'loading') return <p>Loading...</p>;
-  if (session)
+  if (status === 'loading')
+    return <PageLayout title='Loading'>Please wait...</PageLayout>;
+  if (session) {
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
+
     return (
       <PageLayout title='You are logged in'>
         Access your profile or search for flights
       </PageLayout>
     );
+  }
 
-  const isValidEmail = (email: string) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    return emailRegex.test(email);
-  };
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
 
-    if (!isValidEmail(email)) {
-      setError({ error: { emailOrPassword: 'Credentials may be invalid' } });
-      return;
-    }
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
 
-    if (!password || password.length < 8) {
-      setError({ error: { emailOrPassword: 'Credentials may be invalid' } });
+    const result = loginSchema.safeParse({ email, password });
+
+    if (!result.success) {
+      const fieldErrors = result.error.formErrors.fieldErrors;
+      setResponse({
+        error: {
+          email: fieldErrors.email?.[0],
+          password: fieldErrors.password?.[0],
+        },
+        success: false,
+      });
       return;
     }
 
     const res = await signIn('credentials', {
       redirect: false,
-      email,
-      password,
+      email: email,
+      password: password,
     });
 
     if (res?.ok) {
-      console.log('*** Login Ok > ');
+      setResponse({
+        error: null,
+        success: true,
+      });
     }
+
     if (res?.error) {
-      setError({ error: { message: 'Invalid email or password' } });
-    } else {
-      setError(null);
+      setResponse({
+        error: { password: 'Invalid email or password' },
+        success: false,
+      });
     }
   };
 
@@ -94,9 +104,7 @@ export default function Login() {
               className='border-2 p-2 rounded'
               required
             />
-            <div className='text-destructive'>
-              {error?.error?.emailOrPassword}
-            </div>
+            <div className='text-destructive'>{response?.error?.email}</div>
           </Label>
           <Label htmlFor='userEmail' className='flex flex-col'>
             <span className='py-1'>Password</span>
@@ -108,20 +116,23 @@ export default function Login() {
               className='border-2 p-2 rounded'
               required
             />
-            <div className='text-destructive'>
-              {error?.error?.emailOrPassword}
-            </div>
+            <div className='text-destructive'>{response?.error?.password}</div>
           </Label>
         </div>
         <div className='flex justify-between items-center mt-8 mb-2'>
           <SubmitButton />
         </div>
+        {response && (
+          <div className='flex items-center mt-8 text-center'>
+            <p className='text-red-500'>
+              {response?.error && (
+                <p>{response.error.message || 'Login failed'}</p>
+              )}
+              {response?.success && <p>{response.message}</p>}
+            </p>
+          </div>
+        )}
       </form>
-      {response && (
-        <p className='text-red-500'>
-          {response.message ?? error?.error?.message}
-        </p>
-      )}
     </div>
   );
 }

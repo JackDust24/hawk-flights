@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials: any) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as string;
-      session.user.token = token.token as string; //TODO: Should this be access token?
+      session.user.token = token.accessToken as string;
       return session;
     },
   },

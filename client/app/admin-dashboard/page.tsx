@@ -15,7 +15,7 @@ export default function AdminDashboard() {
     if (!user && session?.user.token) {
       const getUserData = async () => {
         const data = await fetchData(
-          'http://localhost:8080/admin-dashboard',
+          `${process.env.NEXT_PUBLIC_API_URL}/admin-dashboard`,
           session?.user.token
         );
         if (data) {

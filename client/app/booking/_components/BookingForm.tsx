@@ -7,7 +7,7 @@ import { createPaymentIntentAndBooking } from '@/actions/bookings';
 import { z } from 'zod';
 import { useFlightStore } from '@/store/flightStore';
 import { useBookingStore } from '@/store/bookingStore';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 import ToastActionButton from '@/app/_components/ToastActionButton';
 
@@ -42,16 +42,6 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const { selectedInboundFlight, selectedOutboundFlight } = useFlightStore();
   const { addBooking } = useBookingStore();
-
-  // const createBookingParams = useCallback(
-  //   (name: string, value: string) => {
-  //     const params = new URLSearchParams(searchParams.toString());
-  //     params.set(name, value);
-
-  //     return params.toString();
-  //   },
-  //   [searchParams]
-  // );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -111,18 +101,19 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
         totalPrice,
       });
 
-      if (Object.hasOwn(response, 'bookingId')) {
-        console.log(response);
-        addBooking(response);
+      if (response.status === 'success' && response.booking) {
+        console.log(response.booking);
+        addBooking(response.booking);
+        const bookingId = response.booking.bookingId;
         router.refresh();
         toast({
           title: 'Your booking was a success.',
-          description: `Confirmation of booking - ${response.bookingId} .`,
+          description: `Confirmation of booking - ${bookingId} .`,
         });
         router.push(
           '/confirmation' +
             '?' +
-            createBookingParams('bookingId', `${response.bookingId}`)
+            createBookingParams('bookingId', `${bookingId}`)
         );
       } else {
         toast({

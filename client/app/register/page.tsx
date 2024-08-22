@@ -6,15 +6,23 @@ import { PageHeader } from '../_components/PageHeader';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 
 const initialState = {
-  message: '',
   success: false,
+  message: '',
 };
 
-//TODO: Sort out error responses
 export default function Register() {
   const [response, action] = useFormState(registerUser, initialState);
+
+  useEffect(() => {
+    if (response?.success) {
+      setTimeout(() => {
+        window.location.href = '/signin';
+      }, 1000);
+    }
+  }, [response]);
 
   return (
     <div className='mx-auto p-4 w-full'>
@@ -35,7 +43,9 @@ export default function Register() {
               className='border-2 p-2 rounded'
               required
             />
-            <div className='text-destructive'>{response?.username}</div>
+            <div className='text-destructive'>
+              {response?.fieldErrors?.username}
+            </div>
           </Label>
           <Label htmlFor='userEmail' className='flex flex-col'>
             <span className='py-1'>Email</span>
@@ -47,7 +57,9 @@ export default function Register() {
               className='border-2 p-2 rounded'
               required
             />
-            <div className='text-destructive'>{response?.email}</div>
+            <div className='text-destructive'>
+              {response?.fieldErrors?.email}
+            </div>
           </Label>
           <Label htmlFor='userEmail' className='flex flex-col'>
             <span className='py-1'>Password</span>
@@ -59,23 +71,25 @@ export default function Register() {
               className='border-2 p-2 rounded'
               required
             />
-            <div className='text-destructive'>{response?.email}</div>
+            <div className='text-destructive'>
+              {response?.fieldErrors?.password}
+            </div>
           </Label>
         </div>
         <div className='flex justify-between items-center mt-8 mb-2'>
-          <SubmitButton />
+          <SubmitButton disableButton={!!response?.success} />
         </div>
+        {response && <p className='text-red-500'>{response?.message}</p>}
       </form>
-      {response && <p className='text-red-500'>{response?.message}</p>}
     </div>
   );
 }
 
-function SubmitButton() {
+function SubmitButton({ disableButton }: { disableButton: boolean }) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type='submit' variant='select' disabled={pending}>
+    <Button type='submit' variant='select' disabled={pending || disableButton}>
       {pending ? 'Registering...' : 'Register'}
     </Button>
   );
