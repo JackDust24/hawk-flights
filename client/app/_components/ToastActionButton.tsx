@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToastAction } from './ui/toast';
+import { ToastAction } from '../../components/ui/toast';
 
 export default function ToastActionButton() {
   return (

@@ -6,7 +6,7 @@ import FlightsForm from './_components/FlightsForm';
 import { searchFlight } from '@/actions/flights';
 import { Flight, FlightsResponse } from '@/app/lib/types';
 import Response from './_components/Response';
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useFlightStore } from '@/store/flightStore';

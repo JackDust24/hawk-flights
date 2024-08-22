@@ -6,6 +6,7 @@ interface FlightStore {
   selectedInboundFlight: Flight | null;
   setSelectedOutboundFlight: (flight: Flight | null) => void;
   setSelectedInboundFlight: (flight: Flight | null) => void;
+  reset: () => void;
 }
 
 export const useFlightStore = create<FlightStore>((set) => ({
@@ -14,4 +15,12 @@ export const useFlightStore = create<FlightStore>((set) => ({
   setSelectedOutboundFlight: (flight) =>
     set({ selectedOutboundFlight: flight }),
   setSelectedInboundFlight: (flight) => set({ selectedInboundFlight: flight }),
+  reset: () => {
+    set(() => {
+      return {
+        selectedOutboundFlight: null,
+        selectedInboundFlight: null,
+      };
+    });
+  },
 }));

@@ -1,7 +1,5 @@
 'use server';
 
-import { signIn } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const registrationSchema = z.object({
@@ -38,9 +36,7 @@ export async function registerUser(prevState: any, formData: FormData) {
     );
 
     if (response.ok) {
-      console.log('SUCCESS');
-
-      //   redirect('/signin');
+      //TODO:   redirect('/signin');
       return { success: true, message: 'Register successful' };
     } else {
       const errorData = await response.json();

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import PageLayout from '../_components/PageLayout';
 
 const initialState = {
   message: '',
@@ -31,7 +32,12 @@ export default function Login() {
   const router = useRouter(); //TODO: Work out routing
 
   if (status === 'loading') return <p>Loading...</p>;
-  if (session) return <p>Logged In...</p>;
+  if (session)
+    return (
+      <PageLayout title='You are logged in'>
+        Access your profile or search for flights
+      </PageLayout>
+    );
 
   const isValidEmail = (email: string) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

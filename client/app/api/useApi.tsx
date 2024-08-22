@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
-import ToastActionButton from '@/components/ToastActionButton';
+import ToastActionButton from '@/app/_components/ToastActionButton';
 
 export function useApi() {
   const { toast } = useToast();

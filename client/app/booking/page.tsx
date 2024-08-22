@@ -14,8 +14,7 @@ export default function Booking() {
   const {
     selectedInboundFlight,
     selectedOutboundFlight,
-    setSelectedInboundFlight,
-    setSelectedOutboundFlight,
+    reset: resetFlights,
   } = useFlightStore();
 
   const handleConfirm = () => {
@@ -23,8 +22,7 @@ export default function Booking() {
   };
 
   const handleCancel = () => {
-    setSelectedInboundFlight(null);
-    setSelectedOutboundFlight(null);
+    resetFlights();
     router.back();
   };
 

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
+import PageLayout from '../_components/PageLayout';
 
 export default function Profile() {
   const { data: session, status } = useSession();
@@ -26,17 +27,14 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className='flex min-h-screen h-full bg-gray-100 items-center justify-center p-24'>
-      <div className='flex flex-col items-center justify-center space-y-8'>
-        <h1>Profile</h1>
-        {error && <p className='text-red-500'>{error} Please sign in</p>}
-        {user && (
-          <div>
-            <p>Welcome, {user.username}</p>
-            <p>You are authorised to view this page</p>
-          </div>
-        )}
-      </div>
-    </div>
+    <PageLayout title='Profile'>
+      {error && <p className='text-red-500'>{error} Please sign in</p>}
+      {user && (
+        <div>
+          <p>Welcome, {user.username}</p>
+          <p>You are authorised to view this page</p>
+        </div>
+      )}
+    </PageLayout>
   );
 }

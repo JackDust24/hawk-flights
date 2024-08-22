@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Flight } from '@/app/lib/types';
 import { Input } from '@/components/ui/input';
@@ -7,9 +7,9 @@ import { createPaymentIntentAndBooking } from '@/actions/bookings';
 import { z } from 'zod';
 import { useFlightStore } from '@/store/flightStore';
 import { useBookingStore } from '@/store/bookingStore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
-import ToastActionButton from '@/components/ToastActionButton';
+import ToastActionButton from '@/app/_components/ToastActionButton';
 
 const paymentSchema = z.object({
   fullname: z.string().min(1, 'Full name is required'),
@@ -42,6 +42,16 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const { selectedInboundFlight, selectedOutboundFlight } = useFlightStore();
   const { addBooking } = useBookingStore();
+
+  // const createBookingParams = useCallback(
+  //   (name: string, value: string) => {
+  //     const params = new URLSearchParams(searchParams.toString());
+  //     params.set(name, value);
+
+  //     return params.toString();
+  //   },
+  //   [searchParams]
+  // );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -102,12 +112,18 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
       });
 
       if (Object.hasOwn(response, 'bookingId')) {
+        console.log(response);
         addBooking(response);
+        router.refresh();
         toast({
           title: 'Your booking was a success.',
           description: `Confirmation of booking - ${response.bookingId} .`,
         });
-        router.push('/confirmation');
+        router.push(
+          '/confirmation' +
+            '?' +
+            createBookingParams('bookingId', `${response.bookingId}`)
+        );
       } else {
         toast({
           variant: 'destructive',
@@ -199,7 +215,7 @@ export default function BookingForm({ totalPrice }: { totalPrice: string }) {
           <Input
             id='securityCode'
             name='securityCode'
-            type='number'
+            type='password'
             placeholder='Security Code'
             maxLength={3}
             className='border-2 p-2 rounded'
@@ -257,3 +273,10 @@ function getFlightDetails(flightInound: Flight, flightOutbound?: Flight) {
   }
   return flightDetails;
 }
+
+const createBookingParams = (name: string, value: string) => {
+  const params = new URLSearchParams();
+  params.set(name, value);
+
+  return params.toString();
+};
