@@ -10,8 +10,8 @@ export function useApi() {
 
   const handleReroute = () => {
     const timer = setTimeout(() => {
-      router.push('/signin');
-    }, 3000);
+      router.push('/');
+    }, 2000);
 
     return () => clearTimeout(timer);
   };

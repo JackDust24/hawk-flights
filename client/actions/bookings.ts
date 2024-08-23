@@ -64,19 +64,22 @@ export async function createPaymentIntentAndBooking({
       paymentResponseData.status === 'payment_succeeded'
     ) {
       // Payment successful, now create a booking
-      const bookingResponse = await fetch(`${API_URL}/bookings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullname: paymentData.fullname,
-          email: paymentData.email,
-          totalPrice,
-          paid: true,
-          flightData,
-        }),
-      });
+      const bookingResponse = await fetch(
+        `${process.env.NEXTAUTH_URL}/api/bookings`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullname: paymentData.fullname,
+            email: paymentData.email,
+            totalPrice,
+            paid: true,
+            flightData,
+          }),
+        }
+      );
 
       if (bookingResponse.status === 200) {
         const booking = await bookingResponse.json();

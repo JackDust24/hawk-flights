@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const sqlite3 = require('sqlite3').verbose();
 const {
   clearData,
@@ -12,8 +13,7 @@ const flightsRoute = require('./routes/flights');
 const paymentRoutes = require('./routes/payments');
 const bookingRoutes = require('./routes/bookings');
 const userRoute = require('./routes/user');
-const cookieParser = require('cookie-parser');
-
+const cookieRoute = require('./routes/cookie-consent');
 const { auth, authorizeRole } = require('./middleware/auth');
 
 const app = express();
@@ -34,12 +34,14 @@ createTables(db)
     );
 
     app.use(bodyParser.json());
+    // Parse cookies - not used in project, but can be useful for storing user data
     app.use(cookieParser());
 
     app.use('/api', flightsRoute);
     app.use('/api/user', userRoute);
     app.use('/api/payments', paymentRoutes);
     app.use('/api/bookings', bookingRoutes);
+    app.use('/api/cookie-consent', cookieRoute);
 
     // Protecting a route that requires authentication
     app.get('/profile', auth, (req, res) => {

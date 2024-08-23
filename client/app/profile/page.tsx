@@ -9,12 +9,14 @@ export default function Profile() {
 
   const [user, setUser] = useState<any>(null);
   const { fetchData, error } = useApi();
+  const [isNeedToLogin, setIsNeedToLogin] = useState(false);
 
   useEffect(() => {
-    if (!user && session?.user.token) {
+    if (user) return;
+    if (session?.user.token) {
       const getProfileData = async () => {
         const data = await fetchData(
-          `${process.env.NEXT_PUBLIC_API_URL}/profile`,
+          'http://localhost:8080/profile',
           session?.user.token
         );
         if (data) {
@@ -23,6 +25,13 @@ export default function Profile() {
       };
 
       getProfileData();
+    } else {
+      setIsNeedToLogin(true);
+      const timer = setTimeout(() => {
+        window.location.href = '/signin';
+      }, 2000);
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -34,6 +43,9 @@ export default function Profile() {
           <p>Welcome, {user.username}</p>
           <p>You are authorised to view this page</p>
         </div>
+      )}
+      {isNeedToLogin && (
+        <p className='text-red-500'>You need to login to access this page</p>
       )}
     </PageLayout>
   );

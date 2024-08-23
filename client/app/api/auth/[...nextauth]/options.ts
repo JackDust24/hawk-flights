@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
 
         token.id = decodedToken.id;
         token.role = decodedToken.role;
-        token.token = user.token;
+        token.accessToken = user.token;
       }
       return token;
     },

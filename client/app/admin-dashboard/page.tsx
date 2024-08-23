@@ -8,14 +8,16 @@ import PageLayout from '../_components/PageLayout';
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const { data: session, status } = useSession();
+  const [isNeedToLogin, setIsNeedToLogin] = useState(false);
 
   const { fetchData, error } = useApi();
 
   useEffect(() => {
-    if (!user && session?.user.token) {
+    if (user) return;
+    if (session?.user.token) {
       const getUserData = async () => {
         const data = await fetchData(
-          `${process.env.NEXT_PUBLIC_API_URL}/admin-dashboard`,
+          'http://localhost:8080/admin-dashboard',
           session?.user.token
         );
         if (data) {
@@ -24,6 +26,13 @@ export default function AdminDashboard() {
       };
 
       getUserData();
+    } else {
+      setIsNeedToLogin(true);
+      const timer = setTimeout(() => {
+        window.location.href = '/signin';
+      }, 2000);
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -38,6 +47,9 @@ export default function AdminDashboard() {
             <span>admin access</span>
           </p>
         </div>
+      )}
+      {isNeedToLogin && (
+        <p className='text-red-500'>You need to login to access this page</p>
       )}
     </PageLayout>
   );

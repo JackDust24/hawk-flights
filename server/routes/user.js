@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const constants = require('../utils/constants');
+const cookie = require('cookie');
 
 const jwt_secret = constants.JWT_SECRET;
 
@@ -99,12 +100,16 @@ router.post('/login', async (req, res) => {
         jwt_secret
       );
 
-      res.cookie('token', token, {
-        httpOnly: true,
-        secure: false, // Will be true in production
-        sameSite: 'Lax', // Adjust as needed
-        maxAge: 3600000000,
-      });
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('token', String(token), {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== 'development',
+          maxAge: 360000000,
+          sameSite: 'strict',
+          path: '/',
+        })
+      );
 
       return res.status(201).json({
         status: 200,
@@ -117,6 +122,19 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
   });
+});
+
+// Not implemented in frontend but here if user wishes to delete their account
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.run('DELETE FROM users WHERE id = ?', [id]);
+    res.status(200).json({ message: 'User data deleted successfully' });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Error deleting user data', error: err.message });
+  }
 });
 
 module.exports = router;

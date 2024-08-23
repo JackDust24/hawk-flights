@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Flights from './flights/page';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import CookieConsent from './_components/CookieConsent';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
           <span>Enter</span>
         </Link>
       </div>
+      <CookieConsent />
     </main>
   );
 }
