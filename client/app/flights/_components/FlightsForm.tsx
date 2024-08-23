@@ -8,7 +8,7 @@ import { useFormStatus } from 'react-dom';
 
 type FlightsFormProps = {
   onSubmit: (payload: FormData) => void;
-  error: Record<string, string[]>;
+  error?: Record<string, string[]>;
 };
 
 export default function FlightsForm({ onSubmit, error }: FlightsFormProps) {

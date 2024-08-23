@@ -26,8 +26,8 @@ export function ErrorBoundaryFallback({ onClick }: ErrorBoundaryFallbackProps) {
   return (
     <PageLayout title='Problem with session'>
       <p className='font-light'>
-        We've encountered a problem. Press Reload to try and redirect you to the
-        home screen.
+        We have encountered a problem. Press Reload to try and redirect you to
+        the home screen.
       </p>
 
       <Button
