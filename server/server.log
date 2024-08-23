@@ -4,3 +4,30 @@
 2024-08-23T04:49:35.544Z [INFO]: Server is running on port 8080
 2024-08-23T04:57:26.195Z [INFO]: User logged in: test@test.com
 2024-08-23T05:02:29.669Z [INFO]: User logged in: test@test.com
+2024-08-23T05:16:03.849Z [INFO]: Server is running on port 8080
+2024-08-23T05:20:32.243Z [INFO]: Server is running on port 8080
+2024-08-23T05:20:41.908Z [INFO]: Server is running on port 8080
+2024-08-23T05:20:50.542Z [INFO]: Server is running on port 8080
+2024-08-23T05:21:01.934Z [INFO]: Server is running on port 8080
+2024-08-23T05:26:30.410Z [INFO]: Payment Successed for 1020
+2024-08-23T05:26:30.436Z [INFO]: Booking successfully inserted, ID: 33
+2024-08-23T05:27:06.877Z [INFO]: User logged in: test@test.com
+2024-08-23T05:27:18.218Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:27:18.222Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:30:59.136Z [INFO]: User logged in: memberUser
+2024-08-23T05:31:04.940Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:31:04.943Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:32:31.609Z [INFO]: Server is running on port 8080
+2024-08-23T05:34:25.975Z [INFO]: Server is running on port 8080
+2024-08-23T05:34:39.922Z [INFO]: User logged in: adminUser
+2024-08-23T05:34:56.921Z [INFO]: Approved access to /admin-dashboard for : [object Object]
+2024-08-23T05:34:56.925Z [INFO]: Approved access to /admin-dashboard for : [object Object]
+2024-08-23T05:38:16.224Z [INFO]: Server is running on port 8080
+2024-08-23T05:39:34.848Z [INFO]: Approved access to /admin-dashboard for : {"id":17,"role":"admin","username":"adminUser","email":"admin@example.com","iat":1724391279}
+2024-08-23T05:39:34.851Z [INFO]: Approved access to /admin-dashboard for : {"id":17,"role":"admin","username":"adminUser","email":"admin@example.com","iat":1724391279}
+2024-08-23T05:40:46.427Z [INFO]: Server is running on port 8080
+2024-08-23T05:40:56.614Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:40:56.625Z [INFO]: Approved access to /profile for : [object Object]
+2024-08-23T05:41:01.133Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-08-23T05:41:01.136Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-08-23T05:41:21.059Z [INFO]: Server is running on port 8080

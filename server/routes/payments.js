@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const { z } = require('zod');
+const logger = require('../utils/logger');
 
 const decryptData = (data) => {
   const secretKey = 'mock_secret_key_for_demo';

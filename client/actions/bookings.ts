@@ -28,6 +28,8 @@ export type PaymentResponse = {
   booking?: BookingInformation;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+
 export async function createPaymentIntentAndBooking({
   paymentData,
   flightData,
@@ -39,7 +41,7 @@ export async function createPaymentIntentAndBooking({
 
   try {
     const paymentResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/payments/create-payment-intent`,
+      `${API_URL}/api/payments/create-payment-intent`,
       {
         method: 'POST',
         headers: {
@@ -64,22 +66,19 @@ export async function createPaymentIntentAndBooking({
       paymentResponseData.status === 'payment_succeeded'
     ) {
       // Payment successful, now create a booking
-      const bookingResponse = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/bookings`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fullname: paymentData.fullname,
-            email: paymentData.email,
-            totalPrice,
-            paid: true,
-            flightData,
-          }),
-        }
-      );
+      const bookingResponse = await fetch(`${API_URL}/api/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullname: paymentData.fullname,
+          email: paymentData.email,
+          totalPrice,
+          paid: true,
+          flightData,
+        }),
+      });
 
       if (bookingResponse.status === 200) {
         const booking = await bookingResponse.json();

@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
+const logger = require('../utils/logger');
 
 const createTables = (db) => {
   return new Promise((resolve, reject) => {
@@ -98,7 +99,7 @@ const insertDefaultUsers = async (db) => {
         );
         stmt.run(
           'adminUser',
-          'adminr@example.com',
+          'admin@example.com',
           hashedAdminPassword,
           'admin'
         );

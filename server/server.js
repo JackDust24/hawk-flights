@@ -48,13 +48,15 @@ createTables(db)
 
     // Protecting a route that requires authentication
     app.get('/profile', auth, (req, res) => {
-      logger.info(`Approved access to /profile for : ${req.user}`);
+      logger.info(`Approved access to /profile for : ${req.user.username}`);
       res.json({ message: 'approved', user: req.user });
     });
 
     // Protecting an admin-only route
     app.get('/admin-dashboard', auth, authorizeRole(['admin']), (req, res) => {
-      logger.info(`Approved access to /admin-dashboard for : ${req.user}`);
+      logger.info(
+        `Approved access to /admin-dashboard for : ${req.user.username}`
+      );
       res.json({ message: 'approved access', user: req.user });
     });
 
