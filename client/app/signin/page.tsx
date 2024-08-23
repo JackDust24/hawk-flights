@@ -32,10 +32,6 @@ export default function Login() {
   if (status === 'loading')
     return <PageLayout title='Loading'>Please wait...</PageLayout>;
   if (session) {
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 3000);
-
     return (
       <PageLayout title='You are logged in'>
         Access your profile or search for flights

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PageLayout from '../_components/PageLayout';
 
-const WAIT_DURATION = 5000;
+const WAIT_DURATION = 3000;
 
 type ErrorBoundaryFallbackProps = {
   onClick: () => void;

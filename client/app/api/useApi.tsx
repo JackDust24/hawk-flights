@@ -11,7 +11,7 @@ export function useApi() {
   const handleReroute = () => {
     const timer = setTimeout(() => {
       router.push('/');
-    }, 2000);
+    }, 800);
 
     return () => clearTimeout(timer);
   };

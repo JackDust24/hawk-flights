@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
 import PageLayout from '../_components/PageLayout';
+import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
@@ -30,11 +31,6 @@ export default function AdminDashboard() {
       getUserData();
     } else {
       setIsNeedToLogin(true);
-      const timer = setTimeout(() => {
-        window.location.href = '/signin';
-      }, 2000);
-
-      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -51,7 +47,13 @@ export default function AdminDashboard() {
         </div>
       )}
       {isNeedToLogin && (
-        <p className='text-red-500'>You need to login to access this page</p>
+        <p className='text-red-500'>
+          You need to{' '}
+          <Link href='/signin' className='underline font-bold'>
+            Log in
+          </Link>{' '}
+          to access this page
+        </p>
       )}
     </PageLayout>
   );

@@ -31,3 +31,9 @@
 2024-08-23T05:41:01.133Z [INFO]: Approved access to /admin-dashboard for : adminUser
 2024-08-23T05:41:01.136Z [INFO]: Approved access to /admin-dashboard for : adminUser
 2024-08-23T05:41:21.059Z [INFO]: Server is running on port 8080
+2024-08-23T05:54:07.408Z [INFO]: Server is running on port 8080
+2024-08-23T05:57:43.303Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-08-23T05:57:43.313Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-08-23T06:02:19.993Z [INFO]: User logged in: memberUser
+2024-08-23T06:02:33.934Z [INFO]: Approved access to /profile for : memberUser
+2024-08-23T06:02:33.937Z [INFO]: Approved access to /profile for : memberUser

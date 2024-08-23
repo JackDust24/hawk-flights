@@ -20,7 +20,7 @@ export default function Register() {
     if (response?.success) {
       setTimeout(() => {
         window.location.href = '/signin';
-      }, 1000);
+      }, 600);
     }
   }, [response]);
 
