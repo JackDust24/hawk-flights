@@ -5,6 +5,8 @@ import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
 import PageLayout from '../_components/PageLayout';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const { data: session, status } = useSession();
@@ -17,7 +19,7 @@ export default function AdminDashboard() {
     if (session?.user.token) {
       const getUserData = async () => {
         const data = await fetchData(
-          'http://localhost:8080/admin-dashboard',
+          `${API_URL}/admin-dashboard`,
           session?.user.token
         );
         if (data) {

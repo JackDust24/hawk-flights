@@ -7,7 +7,7 @@ import CookieConsent from './_components/CookieConsent';
 export default function Home() {
   return (
     <main className='flex min-h-screen h-full bg-gray-100 items-center justify-center p-24'>
-      <div className='flex flex-col items-center justify-center space-y-8'>
+      <div className='flex flex-col items-center justify-center text-center space-y-8'>
         <h1 className='text-6xl font-bold text-[#72daec]'>Welcome to</h1>
         <h2 className='text-6xl font-bold text-[#72daec]'>
           Hawk Flight Booker

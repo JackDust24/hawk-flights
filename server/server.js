@@ -15,11 +15,14 @@ const bookingRoutes = require('./routes/bookings');
 const userRoute = require('./routes/user');
 const cookieRoute = require('./routes/cookie-consent');
 const { auth, authorizeRole } = require('./middleware/auth');
+const logger = require('./utils/logger');
 
 const app = express();
 const PORT = 8080;
 
 const db = new sqlite3.Database('./database.sqlite');
+
+const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 
 createTables(db)
   .then(() => clearData(db))
@@ -28,7 +31,7 @@ createTables(db)
   .then(() => {
     app.use(
       cors({
-        origin: 'http://localhost:3000',
+        origin: FRONTEND_URL,
         credentials: true,
       })
     );
@@ -45,15 +48,18 @@ createTables(db)
 
     // Protecting a route that requires authentication
     app.get('/profile', auth, (req, res) => {
+      logger.info(`Approved access to /profile for : ${req.user}`);
       res.json({ message: 'approved', user: req.user });
     });
 
     // Protecting an admin-only route
     app.get('/admin-dashboard', auth, authorizeRole(['admin']), (req, res) => {
+      logger.info(`Approved access to /admin-dashboard for : ${req.user}`);
       res.json({ message: 'approved access', user: req.user });
     });
 
     app.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
   });

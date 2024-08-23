@@ -64,9 +64,9 @@ router.post('/', (req, res) => {
     email,
     function (err) {
       if (err) {
-        console.error('Error running the query:', err.message);
+        logger.info(`Failed to create booking ${err.message}`);
       } else {
-        console.log('Booking successfully inserted, ID:', this.lastID);
+        logger.info(`Booking successfully inserted, ID: ${this.lastID}`);
       }
     }
   );

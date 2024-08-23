@@ -18,6 +18,7 @@ const createTables = (db) => {
         )`,
         (err) => {
           if (err) {
+            logger.warn(`Unable to create Flights table: ${err.message}`);
             reject(err);
           } else {
             resolve();
@@ -37,6 +38,7 @@ const createTables = (db) => {
     )`,
         (err) => {
           if (err) {
+            logger.warn(`Unable to create bookings table: ${err.message}`);
             return reject(err);
           }
           resolve();
@@ -56,8 +58,10 @@ const createTables = (db) => {
       `,
         (err) => {
           if (err) {
-            console.error('Error creating users table:', err.message);
+            logger.warn(`Unable to create users table: ${err.message}`);
+            return reject(err);
           }
+          resolve();
         }
       );
     });

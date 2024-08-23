@@ -61,6 +61,8 @@ router.post('/create-payment-intent', (req, res) => {
     return res.status(400).json({ error: validationResult.error.errors });
   }
 
+  logger.info(`Payment Successed for ${totalPrice}`);
+
   res.json({
     status: 'payment_succeeded',
     clientSecret: 'mock_client_secret',

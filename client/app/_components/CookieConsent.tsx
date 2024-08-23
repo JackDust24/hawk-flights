@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Button } from '@/components/ui/button';
+import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
@@ -17,30 +18,41 @@ const CookieConsent = () => {
   }, []);
 
   const handleAccept = async () => {
-    console.log('Accepting cookies');
     Cookies.set('cookie_consent', 'true', { expires: 365 });
     setConsent(true);
 
-    await fetch(`${API_URL}/api/cookie-consent`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ consent: 'true' }),
-    });
+    try {
+      await axios.post(
+        `${API_URL}/api/cookie-consent`,
+        { consent: 'true' },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    } catch (err) {
+      console.warn('Error with consent, not important issue - ', err);
+    }
   };
 
   const handleDecline = async () => {
     Cookies.set('cookie_consent', 'false', { expires: 365 });
     setConsent(false);
 
-    await fetch(`${API_URL}/api/cookie-consent`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ consent: 'false' }),
-    });
+    try {
+      await axios.post(
+        `${API_URL}/api/cookie-consent`,
+        { consent: 'false' },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    } catch (err) {
+      console.warn('Error with consent, not important issue - ', err);
+    }
   };
 
   if (consent !== null) return null;

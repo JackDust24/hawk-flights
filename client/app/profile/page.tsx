@@ -4,6 +4,8 @@ import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
 import PageLayout from '../_components/PageLayout';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+
 export default function Profile() {
   const { data: session, status } = useSession();
 
@@ -15,10 +17,7 @@ export default function Profile() {
     if (user) return;
     if (session?.user.token) {
       const getProfileData = async () => {
-        const data = await fetchData(
-          'http://localhost:8080/profile',
-          session?.user.token
-        );
+        const data = await fetchData(`${API_URL}/profile`, session?.user.token);
         if (data) {
           setUser(data.user);
         }

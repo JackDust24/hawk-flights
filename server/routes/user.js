@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const constants = require('../utils/constants');
 const cookie = require('cookie');
+const logger = require('../utils/logger');
 
 const jwt_secret = constants.JWT_SECRET;
 
@@ -19,7 +20,10 @@ router.post('/register', async (req, res) => {
       [username, email],
       async (err, user) => {
         if (err) {
-          console.error('Database error:', err.message);
+          logger.warn(
+            `Possible database issue when registering user: ${err.message}`
+          );
+
           return res
             .status(500)
             .json({ message: 'Database error', error: err.message });
@@ -46,12 +50,14 @@ router.post('/register', async (req, res) => {
           [username, email, hashedPassword, role],
           function (err) {
             if (err) {
-              console.error('Error inserting user:', err.message);
+              logger.info(`Error inserting user: ${err.message}`);
               return res
                 .status(500)
                 .json({ message: 'Error inserting user', error: err.message });
             } else {
-              console.log(`User ${username} inserted with ID: ${this.lastID}`);
+              logger.info(
+                `User ${username} inserted user table with ID: ${this.lastID}`
+              );
               return res.status(201).json({
                 status: 201,
                 success: true,
@@ -63,7 +69,7 @@ router.post('/register', async (req, res) => {
       }
     );
   } catch (err) {
-    console.error('Error hashing password:', err.message);
+    logger.info(`Error hashing password: ${err.message}`);
     res.status(400).json({
       message: 'Invalid Register',
       error: 'Please provide all required fields',
@@ -73,11 +79,12 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('email:', email);
-  console.log('password:', password);
 
   db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
     if (err) {
+      logger.warn(
+        `Possible database issue when user logging in: ${err.message}`
+      );
       return res
         .status(500)
         .json({ message: 'Database error', error: err.message });
@@ -110,7 +117,7 @@ router.post('/login', async (req, res) => {
           path: '/',
         })
       );
-
+      logger.info(`User logged in: ${user.username}`);
       return res.status(201).json({
         status: 200,
         success: true,
@@ -131,6 +138,7 @@ router.delete('/:id', async (req, res) => {
     await db.run('DELETE FROM users WHERE id = ?', [id]);
     res.status(200).json({ message: 'User data deleted successfully' });
   } catch (err) {
+    logger.warn(`Unable to delete user: UserId: ${id}`);
     res
       .status(500)
       .json({ message: 'Error deleting user data', error: err.message });

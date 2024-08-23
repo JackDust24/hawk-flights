@@ -6,10 +6,10 @@ const validator = require('validator');
 const db = new sqlite3.Database('./database.sqlite');
 
 // For calling the database to get the mock data
-const internalOrigin = 'London';
-const internalDestination = 'Bangkok';
-const internalFlightDate = '2024-07-11';
-const internalReturnDate = '2024-07-24';
+const MOCK_ORIGIN = 'London';
+const MOCK_DESTINATION = 'Bangkok';
+const MOCK_FLIGHT_DATE = '2024-07-11';
+const MOCK_RETURN_DATE = '2024-07-24';
 
 router.get('/flights', (req, res) => {
   const { origin, destination, flightDate, returnDate } = req.query;
@@ -35,6 +35,9 @@ router.get('/flights', (req, res) => {
 
   db.all(`SELECT * FROM flights`, [], (err, rows) => {
     if (err) {
+      logger.warn(
+        `Possible databasee error retrieving from Flights table: ${err.message}`
+      );
       console.error('Database error:', err.message);
       return res
         .status(500)
@@ -50,7 +53,7 @@ router.get('/flights', (req, res) => {
       WHERE origin = ? 
         AND destination = ? 
         AND flight_date = ?`,
-      [internalOrigin, internalDestination, internalFlightDate],
+      [MOCK_ORIGIN, MOCK_DESTINATION, MOCK_FLIGHT_DATE],
       (err, outboundFlights) => {
         if (err) {
           res
@@ -66,7 +69,7 @@ router.get('/flights', (req, res) => {
       WHERE origin = ? 
         AND destination = ? 
         AND flight_date = ?`,
-          [internalDestination, internalOrigin, internalReturnDate],
+          [MOCK_DESTINATION, MOCK_ORIGIN, MOCK_RETURN_DATE],
           (err, inBoundFlights) => {
             if (err) {
               res

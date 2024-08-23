@@ -53,6 +53,7 @@ export const authOptions: NextAuthOptions = {
 
         token.id = decodedToken.id;
         token.role = decodedToken.role;
+        token.email = decodedToken.email;
         token.accessToken = user.token;
       }
       return token;
@@ -61,6 +62,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as string;
+      session.user.email = token.email as string;
       session.user.token = token.accessToken as string;
       return session;
     },

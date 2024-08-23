@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import axios from 'axios';
 
 const registrationSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -37,28 +38,35 @@ export async function registerUser(
       ...formObject,
       role: formObject.role || 'member',
     };
-    const response = await fetch(
+
+    await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`,
+      data,
       {
-        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
       }
     );
 
-    if (response.ok) {
-      return { success: true, message: 'Register successful' };
+    return { success: true, message: 'Register successful' };
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        return {
+          success: false,
+          message: error.response.data.message || 'Registration failed.',
+        };
+      } else if (error.request) {
+        return { success: false, message: 'No response from server' };
+      } else {
+        return {
+          success: false,
+          message: 'Error occurred while setting up request',
+        };
+      }
     } else {
-      const errorData = await response.json();
-      return {
-        success: false,
-        message: errorData.message || 'Registration failed.',
-      };
+      return { success: false, message: 'An unknown error occurred' };
     }
-  } catch (error) {
-    console.error('Error during registration:', error);
-    return { success: false, message: 'An unexpected error occurred.' };
   }
 }
