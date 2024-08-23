@@ -130,11 +130,16 @@ You will be automatically asigned he member role.
 
 ### Expected Result - Proflie Screen -
 **Not signed In** - Profile screen displays you CANNOT view what's on the page
+
 **Signed in as a member** - Profile screen displays you can access content
+
 **Signed in as an Admin** - Profile screen displays you can access content
+
 
 ### Expected Result - Admin Dashboard Screen -
 **Not signed In** - Admin Dashboard screen displays you CANNOT view what's on the page
+
 **Signed in as a member** - Admin Dashboard screen displays you CANNOT view what's on the page
+
 **Signed in as an Admin** - Admin Dashboard screen displays you can access content
 
