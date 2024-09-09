@@ -21,6 +21,7 @@ const initialState: FlightsResponse = {
   outbound: [],
   inbound: [],
 };
+
 export default function Flights() {
   const [isPending, startTransition] = useTransition();
   const [isResponseReceived, setIsResponseReceived] = useState(false);
@@ -106,7 +107,7 @@ export default function Flights() {
           {response && !response.success && (
             <div className='text-center text-red-500'>{response.message}</div>
           )}
-          {response && searchResult && searchResult.outbound.length > 0 && (
+          {response && searchResult && searchResult.outbound?.length > 0 && (
             <div className='space-y-8 w-full'>
               <h3 className='text-xl font-semibold text-center'>
                 Please select an outbound flight

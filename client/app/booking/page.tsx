@@ -23,11 +23,11 @@ export default function Booking() {
 
   const handleCancel = () => {
     resetFlights();
-    router.back();
+    router.push('/flights');
   };
 
   if (!selectedOutboundFlight || !selectedInboundFlight) {
-    router.back();
+    router.push('/flights');
     return null;
   }
 

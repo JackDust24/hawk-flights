@@ -36,10 +36,7 @@ router.post('/register', async (req, res) => {
           });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert the new user
         const insertSQL = `
     INSERT INTO users (username, email, hashedPassword, role)
     VALUES (?, ?, ?, ?)

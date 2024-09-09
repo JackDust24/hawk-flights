@@ -13,6 +13,7 @@ export default function Confirmation() {
   useEffect(() => {
     cleanupBooking();
   }, []);
+
   return (
     <PageLayout title='Confirmation'>
       <div>
