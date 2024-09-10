@@ -18,7 +18,6 @@ export default function Home() {
         >
           <span>Enter</span>
         </Link>
-        <CookieConsent />
       </div>
     </main>
   );

@@ -6,6 +6,7 @@ import AuthProvider from './providers/AuthProvider';
 import { getServerSession } from 'next-auth';
 import './globals.css';
 import { RootErrorBoundary } from './features/RootErrorBoundary';
+import CookieConsent from './_components/CookieConsent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,6 +35,7 @@ export default async function RootLayout({
               <LoginStatus />
             </Nav>
             {children}
+            <CookieConsent />
             <Toaster />
           </AuthProvider>
         </RootErrorBoundary>

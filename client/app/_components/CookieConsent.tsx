@@ -8,12 +8,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
 const CookieConsent = () => {
   const [consent, setConsent] = useState<boolean | null>(null);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
 
   useEffect(() => {
     const savedConsent = Cookies.get('cookie_consent');
     if (savedConsent) {
       setConsent(savedConsent === 'true');
     }
+    setIsPageLoaded(true);
   }, []);
 
   const handleAccept = async () => {
@@ -42,7 +44,7 @@ const CookieConsent = () => {
     });
   };
 
-  if (consent !== null) return null;
+  if (consent !== null || !isPageLoaded) return null;
 
   return (
     <div className='fixed bottom-0 w-full bg-black text-green-500 p-2 h-[8rem] text-lg text-center'>
