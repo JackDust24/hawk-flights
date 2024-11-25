@@ -37,3 +37,53 @@
 2024-08-23T06:02:19.993Z [INFO]: User logged in: memberUser
 2024-08-23T06:02:33.934Z [INFO]: Approved access to /profile for : memberUser
 2024-08-23T06:02:33.937Z [INFO]: Approved access to /profile for : memberUser
+2024-09-06T05:50:37.800Z [INFO]: Server is running on port 8080
+2024-09-06T05:51:54.340Z [INFO]: Server is running on port 8080
+2024-09-06T05:54:48.158Z [INFO]: Server is running on port 8080
+2024-09-07T05:47:09.773Z [INFO]: Server is running on port 8080
+2024-09-07T06:07:42.152Z [INFO]: Payment Successed for 1130
+2024-09-07T06:07:42.165Z [INFO]: Booking successfully inserted, ID: 34
+2024-09-07T07:03:33.233Z [INFO]: User logged in: adminUser
+2024-09-07T07:03:38.697Z [INFO]: Approved access to /profile for : adminUser
+2024-09-07T07:03:38.702Z [INFO]: Approved access to /profile for : adminUser
+2024-09-07T07:03:40.968Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-09-07T07:03:40.971Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-09-07T07:04:20.148Z [INFO]: User Jasos inserted user table with ID: 18
+2024-09-07T07:04:35.457Z [INFO]: User logged in: Jasos
+2024-09-07T07:06:05.519Z [INFO]: Approved access to /profile for : Jasos
+2024-09-07T07:06:05.524Z [INFO]: Approved access to /profile for : Jasos
+2024-09-08T02:39:18.227Z [INFO]: Server is running on port 8080
+2024-09-09T06:36:29.154Z [INFO]: Server is running on port 8080
+2024-09-09T08:23:24.474Z [INFO]: Server is running on port 8080
+2024-09-09T08:34:38.388Z [INFO]: Payment Successed for 1130
+2024-09-09T08:34:38.399Z [INFO]: Booking successfully inserted, ID: 35
+2024-09-09T08:40:39.140Z [INFO]: User logged in: adminUser
+2024-09-09T08:40:44.739Z [INFO]: Approved access to /profile for : adminUser
+2024-09-09T08:40:44.742Z [INFO]: Approved access to /profile for : adminUser
+2024-09-09T08:40:47.056Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-09-09T08:40:47.059Z [INFO]: Approved access to /admin-dashboard for : adminUser
+2024-09-09T08:42:22.845Z [INFO]: User jason inserted user table with ID: 19
+2024-09-09T08:42:45.641Z [INFO]: User logged in: jason
+2024-09-09T08:43:02.798Z [INFO]: Approved access to /profile for : jason
+2024-09-09T08:43:02.803Z [INFO]: Approved access to /profile for : jason
+2024-09-09T08:45:55.273Z [INFO]: Payment Successed for 1180
+2024-09-09T08:45:55.281Z [INFO]: Booking successfully inserted, ID: 36
+2024-09-09T08:53:12.411Z [INFO]: Server is running on port 8080
+2024-09-10T07:01:07.974Z [INFO]: Server is running on port 8080
+2024-09-10T07:03:20.813Z [INFO]: Server is running on port 8080
+2024-09-10T07:03:24.786Z [INFO]: Server is running on port 8080
+2024-09-10T07:06:48.566Z [INFO]: Server is running on port 8080
+2024-09-10T07:08:24.220Z [INFO]: Server is running on port 8080
+2024-09-10T07:12:24.087Z [INFO]: Server is running on port 8080
+2024-09-10T07:21:05.320Z [INFO]: Server is running on port 8080
+2024-09-10T07:23:56.040Z [INFO]: Server is running on port 8080
+2024-09-10T07:29:05.421Z [INFO]: Server is running on port 8080
+2024-09-10T07:30:12.515Z [INFO]: Server is running on port 8080
+2024-09-10T07:35:16.042Z [INFO]: Approved access to /profile for : jason
+2024-09-10T07:35:16.044Z [INFO]: Approved access to /profile for : jason
+2024-09-10T07:35:21.475Z [INFO]: Approved access to /profile for : jason
+2024-09-10T07:35:21.479Z [INFO]: Approved access to /profile for : jason
+2024-09-10T07:36:02.664Z [INFO]: User logged in: adminUser
+2024-09-10T07:39:27.389Z [INFO]: User logged in: adminUser
+2024-09-10T07:39:46.110Z [INFO]: User logged in: adminUser
+2024-11-25T05:26:47.924Z [INFO]: Server is running on port 8080
