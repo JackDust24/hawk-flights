@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Button } from '@/components/ui/button';
+import { getApiUrl } from '@/utils/api';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+const API_URL = getApiUrl() ?? 'http://localhost:4000';
 
 const CookieConsent = () => {
   const [consent, setConsent] = useState<boolean | null>(null);

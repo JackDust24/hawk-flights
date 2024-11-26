@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import axios from 'axios';
+import { getApiUrl } from '../utils/api';
 
 const registrationSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -39,15 +40,11 @@ export async function registerUser(
       role: formObject.role || 'member',
     };
 
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`,
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    await axios.post(`${getApiUrl()}/api/user/register`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     return { success: true, message: 'Register successful' };
   } catch (error: unknown) {

@@ -5,8 +5,9 @@ import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
 import PageLayout from '../_components/PageLayout';
 import Link from 'next/link';
+import { getApiUrl } from '@/utils/api';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+const API_URL = getApiUrl() ?? 'http://localhost:4000';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);

@@ -18,7 +18,7 @@ const { auth, authorizeRole } = require('./middleware/auth');
 const logger = require('./utils/logger');
 
 const app = express();
-const PORT = 8080;
+const PORT = 4000;
 
 const db = new sqlite3.Database('./database.sqlite');
 

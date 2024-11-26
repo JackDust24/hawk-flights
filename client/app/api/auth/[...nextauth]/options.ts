@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import type { NextAuthOptions } from 'next-auth';
 import jwt from 'jsonwebtoken';
+import { getApiUrl } from '@/utils/api';
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -19,14 +20,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: any) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(credentials),
-          }
-        );
+        const res = await fetch(`${getApiUrl()}/api/user/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(credentials),
+        });
 
         const user = await res.json();
 

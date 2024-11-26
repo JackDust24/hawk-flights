@@ -1,0 +1,32 @@
+services:
+  # Next.js Client
+  nextjs-app:
+    build:
+      context: ./client # Set build context to ./client
+      dockerfile: Dockerfile # Specify the Dockerfile for the Next.js client
+    ports:
+      - '3000:3000'
+    environment:
+      NEXTAUTH_SECRET: 'aOfhYtAPutPS1i4I8/vvVkzGC+1rw3cciGn7yVcJiDc='
+      NEXTAUTH_URL: 'http://localhost:3000'
+      JWT_SECRET: 'hawk_flight_jwt_secret'
+      API_URL: 'http://server:4000'
+    volumes:
+      - ./client:/app
+    command: ['npm', 'run', 'dev']
+
+  # Node.js API Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    environment:
+      API_SECRET: 'some_api_secret'
+      FRONTEND_URL: 'http://localhost:3000'
+      NODE_ENV: 'development'
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: ['npm', 'run', 'dev']

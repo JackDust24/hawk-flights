@@ -1,6 +1,7 @@
 'use server';
 
 import { FlightsResponse } from '@/app/lib/types';
+import { getApiUrl } from '@/utils/api';
 import { z } from 'zod';
 
 const dateSchema = z
@@ -53,12 +54,9 @@ export async function searchFlight(
       returnDate: returnDate.toISOString().split('T')[0],
     }).toString();
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/flights?${query}`,
-      {
-        method: 'GET',
-      }
-    );
+    const response = await fetch(`${getApiUrl()}/api/flights?${query}`, {
+      method: 'GET',
+    });
 
     const result = await response.json();
 

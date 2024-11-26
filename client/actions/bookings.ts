@@ -1,6 +1,7 @@
 'use server';
 
 import { BookingInformation, Flight, PaymentData } from '@/app/lib/types';
+import { getApiUrl } from '@/utils/api';
 import crypto from 'crypto';
 
 type BookingData = {
@@ -28,7 +29,7 @@ export type PaymentResponse = {
   booking?: BookingInformation;
 };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+const API_URL = getApiUrl() ?? 'http://localhost:4000';
 
 export async function createPaymentIntentAndBooking({
   paymentData,
