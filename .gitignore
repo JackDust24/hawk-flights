@@ -2,7 +2,7 @@
 /node_modules
 
 /client/.next/
-/client/.env.loval
+/client/.env.local
 /client/node_modules
 /server/node_modules
 /server/.env

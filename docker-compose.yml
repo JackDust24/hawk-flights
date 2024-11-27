@@ -12,8 +12,8 @@ services:
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - JWT_SECRET=${JWT_SECRET}
       - API_URL=${API_URL}
-    volumes:
-      - ./client:/app
+    # volumes:
+    #   - ./client:/app
     env_file:
       - .env
     networks:
@@ -30,9 +30,9 @@ services:
       - API_SECRET=${API_SECRET}
       - FRONTEND_URL=${FRONTEND_URL}
       - NODE_ENV=${NODE_ENV}
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./server:/app
+    #   - /app/node_modules
     networks:
       - app-network
     env_file:
