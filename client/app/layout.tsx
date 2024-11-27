@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '../components/ui/toaster';
 import { LoginStatus, Nav, NavLink } from './_components/nav';
 import AuthProvider from './providers/AuthProvider';
 import { getServerSession } from 'next-auth';

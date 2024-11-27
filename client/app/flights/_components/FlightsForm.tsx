@@ -1,10 +1,10 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { DatePicker } from '../../_components/DatePicker';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useFormStatus } from 'react-dom';
+import { Input } from '../../../components/ui/input';
+import { Label } from '../../../components/ui/label';
+import { Button } from '../../../components/ui/button';
+import { DatePicker } from '../../_components/DatePicker';
 
 type FlightsFormProps = {
   onSubmit: (payload: FormData) => void;

@@ -1,8 +1,8 @@
 'use server';
 
-import { BookingInformation, Flight, PaymentData } from '@/app/lib/types';
-import { getApiUrl } from '@/utils/api';
 import crypto from 'crypto';
+import { BookingInformation, Flight, PaymentData } from '../app/lib/types';
+import { getApiUrl } from '../utils/api';
 
 type BookingData = {
   paymentData: PaymentData;

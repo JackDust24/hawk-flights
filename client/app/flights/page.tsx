@@ -1,10 +1,6 @@
 'use client';
+
 import { useFormState } from 'react-dom';
-import { PageHeader } from '../_components/PageHeader';
-import FlightsForm from './_components/FlightsForm';
-import { searchFlight } from '@/actions/flights';
-import { Flight, FlightsResponse } from '@/app/lib/types';
-import Response from './_components/FlightsResponse';
 import {
   useEffect,
   useLayoutEffect,
@@ -12,9 +8,14 @@ import {
   useState,
   useTransition,
 } from 'react';
-import { useFlightStore } from '@/store/flightStore';
-import FlightsResponseSkeleton from './_components/FlightsResponseSkeleton';
+import { PageHeader } from '../_components/PageHeader';
+import FlightsForm from './_components/FlightsForm';
+import Response from './_components/FlightsResponse';
 import { BookFlightButton } from './_components/BookFlightButton';
+import FlightsResponseSkeleton from './_components/FlightsResponseSkeleton';
+import { searchFlight } from '../../actions/flights';
+import { Flight, FlightsResponse } from '../../app/lib/types';
+import { useFlightStore } from '../../store/flightStore';
 
 const initialState: FlightsResponse = {
   message: '',

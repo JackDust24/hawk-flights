@@ -1,8 +1,8 @@
 'use server';
 
-import { FlightsResponse } from '@/app/lib/types';
-import { getApiUrl } from '@/utils/api';
 import { z } from 'zod';
+import { FlightsResponse } from '../app/lib/types';
+import { getApiUrl } from '../utils/api';
 
 const dateSchema = z
   .string()

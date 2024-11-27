@@ -1,8 +1,7 @@
-import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import type { NextAuthOptions } from 'next-auth';
 import jwt from 'jsonwebtoken';
-import { getApiUrl } from '@/utils/api';
+import { getApiUrl } from '../../../../utils/api';
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 

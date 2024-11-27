@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 import PageLayout from '../_components/PageLayout';
 
 const WAIT_DURATION = 3000;

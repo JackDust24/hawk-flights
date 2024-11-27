@@ -2,9 +2,9 @@
 
 import { PageHeader } from '../_components/PageHeader';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useFlightStore } from '@/store/flightStore';
+import { useFlightStore } from '../../store/flightStore';
 import BookingForm from './_components/BookingForm';
 import { ArrowRightIcon, CalendarIcon } from 'lucide-react';
 

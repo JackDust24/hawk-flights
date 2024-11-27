@@ -1,12 +1,12 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { registerUser } from '@/actions/auth';
-import { PageHeader } from '../_components/PageHeader';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
+import { registerUser } from '../../actions/auth';
+import { PageHeader } from '../_components/PageHeader';
+import { Label } from '../../components/ui/label';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
 
 const initialState = {
   success: false,

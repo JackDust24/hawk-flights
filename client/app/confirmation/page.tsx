@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import PageLayout from '../_components/PageLayout';
 import { useSearchParams } from 'next/navigation';
-import { useFlightStore } from '@/store/flightStore';
+import PageLayout from '../_components/PageLayout';
+import { useFlightStore } from '../../store/flightStore';
 
 export default function Confirmation() {
   const searchParams = useSearchParams();

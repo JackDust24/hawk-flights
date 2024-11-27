@@ -1,15 +1,15 @@
-import { useCallback, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Flight } from '@/app/lib/types';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { createPaymentIntentAndBooking } from '@/actions/bookings';
-import { z } from 'zod';
-import { useFlightStore } from '@/store/flightStore';
-import { useBookingStore } from '@/store/bookingStore';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/ui/use-toast';
-import ToastActionButton from '@/app/_components/ToastActionButton';
+import { z } from 'zod';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Label } from '../../../components/ui/label';
+import { useToast } from '../../../components/ui/use-toast';
+import { Flight } from '../../lib/types';
+import ToastActionButton from '../../_components/ToastActionButton';
+import { createPaymentIntentAndBooking } from '../../../actions/bookings';
+import { useFlightStore } from '../../../store/flightStore';
+import { useBookingStore } from '../../../store/bookingStore';
 
 const paymentSchema = z.object({
   fullname: z.string().min(1, 'Full name is required'),

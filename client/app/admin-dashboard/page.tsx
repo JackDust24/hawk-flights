@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useApi } from '@/app/api/useApi'; // Adjust path as needed
 import { useSession } from 'next-auth/react';
-import PageLayout from '../_components/PageLayout';
 import Link from 'next/link';
-import { getApiUrl } from '@/utils/api';
+import { useApi } from '../../app/api/useApi';
+import PageLayout from '../_components/PageLayout';
+import { getApiUrl } from '../../utils/api';
 
 const API_URL = getApiUrl() ?? 'http://localhost:4000';
 

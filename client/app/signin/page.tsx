@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { PageHeader } from '../_components/PageHeader';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { signIn, useSession } from 'next-auth/react';
-import PageLayout from '../_components/PageLayout';
 import z from 'zod';
+import { signIn, useSession } from 'next-auth/react';
+import { PageHeader } from '../_components/PageHeader';
+import PageLayout from '../_components/PageLayout';
+import { Label } from '../../components/ui/label';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
 
 type Response = {
   error?: {

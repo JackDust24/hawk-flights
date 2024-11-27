@@ -1,7 +1,7 @@
-import { Flight, FlightType } from '@/app/lib/types';
 import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../components/ui/button';
+import { Flight, FlightType } from '../../lib/types';
 
 export default function FlightsResponse({
   flight,
