@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Button } from '@/components/ui/button';
-import { getApiUrl } from '@/utils/api';
+import { Button } from '../../components/ui/button';
+import { getApiUrl } from '../../utils/api';
 
 const API_URL = getApiUrl() ?? 'http://localhost:4000';
 
