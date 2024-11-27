@@ -1,6 +1,6 @@
 'use client';
 import { format } from 'url';
-import { cn } from '@/app/lib/utils';
+import { cn } from '../lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode } from 'react';
