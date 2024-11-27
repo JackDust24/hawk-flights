@@ -1,0 +1,17 @@
+# Use an official Node.js image
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy application code
+COPY . .
+
+# Expose server port
+EXPOSE 4000
+
+# Run the server in production mode
+CMD ["node", "server.js"]

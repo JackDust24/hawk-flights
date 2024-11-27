@@ -2,5 +2,10 @@
 /node_modules
 
 /client/.next/
+/client/.env.loval
 /client/node_modules
 /server/node_modules
+/server/.env
+
+.env
+deploy.sh

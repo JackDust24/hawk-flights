@@ -2,31 +2,44 @@ services:
   # Next.js Client
   nextjs-app:
     build:
-      context: ./client # Set build context to ./client
-      dockerfile: Dockerfile # Specify the Dockerfile for the Next.js client
+      context: ./client
+      dockerfile: Dockerfile.prod
     ports:
       - '3000:3000'
     environment:
-      NEXTAUTH_SECRET: 'aOfhYtAPutPS1i4I8/vvVkzGC+1rw3cciGn7yVcJiDc='
-      NEXTAUTH_URL: 'http://localhost:3000'
-      JWT_SECRET: 'hawk_flight_jwt_secret'
-      API_URL: 'http://server:4000'
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - API_URL=${API_URL}
     volumes:
       - ./client:/app
-    command: ['npm', 'run', 'dev']
+    env_file:
+      - .env
+    networks:
+      - app-network
+    command: ['npm', 'run', 'build']
+    entrypoint: ['npm', 'start']
 
   # Node.js API Server
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
       - '4000:4000'
     environment:
-      API_SECRET: 'some_api_secret'
-      FRONTEND_URL: 'http://localhost:3000'
-      NODE_ENV: 'development'
+      - API_SECRET=${API_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - NODE_ENV=${NODE_ENV}
     volumes:
       - ./server:/app
       - /app/node_modules
-    command: ['npm', 'run', 'dev']
+    networks:
+      - app-network
+    env_file:
+      - .env
+    command: ['npm', 'run', 'start']
+
+networks:
+  app-network:
+    driver: bridge
