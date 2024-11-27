@@ -28,6 +28,6 @@ RUN npm install --production
 # Expose the port
 EXPOSE 3000
 
-# Start the server
+# Start the client
 CMD ["npm", "start"]
 
