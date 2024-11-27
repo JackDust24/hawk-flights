@@ -29,13 +29,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./package.json
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
-# COPY --from=builder /app/node_modules ./node_modules
 
-# Install production dependencies
+# Install ONLY production dependencies
 RUN npm install --production
 
-# Expose port
+# Set user
+USER nextjs
+
 EXPOSE 3000
 
-# Start the Next.js app
-CMD ["npm", "start"]
+# Use next start instead of npm start
+CMD ["npx", "next", "start"]
