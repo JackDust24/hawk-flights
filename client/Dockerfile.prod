@@ -8,7 +8,7 @@ COPY package*.json ./
 # Production dependencies only
 RUN npm install --production
 
-# Copy the rest of the application files
+# Copy the rest of the application files, including tsconfig.json/jsconfig.json
 COPY . .
 
 # Build the Next.js app
@@ -27,6 +27,7 @@ RUN adduser --system --uid 1001 nextjs
 # Copy built files
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/tsconfig.json ./
 
 # Install production dependencies
 RUN npm install --production
